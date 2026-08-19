@@ -11,7 +11,7 @@ export const contact = {
   whatsapp: '6281234567890',
   instagram: 'https://instagram.com/akv.visual',
   tiktok: 'https://tiktok.com/@akv.visual',
-  email: 'halo@arahkaryavisual.id',
+  email: 'halo@akv.zakariamp.id',
 }
 
 

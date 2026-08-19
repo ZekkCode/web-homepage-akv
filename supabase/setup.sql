@@ -176,7 +176,7 @@ create policy "Admin delete team_members"
 -- ====================================================================
 
 insert into public.contact (id, whatsapp, instagram, tiktok, email) values
-  (1, '6281234567890', 'https://instagram.com/akv.visual', 'https://tiktok.com/@akv.visual', 'halo@arahkaryavisual.id')
+  (1, '6281234567890', 'https://instagram.com/akv.visual', 'https://tiktok.com/@akv.visual', 'halo@akv.zakariamp.id')
 on conflict (id) do nothing;
 
 insert into public.services (id, icon, title, "desc") values
