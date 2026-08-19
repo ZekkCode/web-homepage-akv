@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262 150" fill="none">
+  <!-- Flyout menu tool ala aplikasi desain (palet AKV) -->
+  <rect x="6" y="6" width="46" height="138" rx="13" fill="#FFFFFF" stroke="#0D1B3D" stroke-width="4"/>
+  <!-- kursor -->
+  <path d="M24 20 L37 30 L30.5 31.5 L34 39 L29.5 41 L26 33.5 L22 37.5 Z" fill="#1E3C8F"/>
+  <!-- pen aktif -->
+  <rect x="13" y="56" width="32" height="26" rx="7" fill="#DCEBFF"/>
+  <path d="M29 59 L37 69 L29 78 L21 69 Z" fill="#0B5CFF" stroke="#0D1B3D" stroke-width="3"/>
+  <circle cx="29" cy="69" r="2.4" fill="#FFFFFF"/>
+  <!-- teks -->
+  <path d="M22 104 H36 M29 104 V119" stroke="#1E3C8F" stroke-width="3.2" stroke-linecap="round"/>
+  <!-- panel flyout -->
+  <rect x="60" y="42" width="196" height="102" rx="13" fill="#FFFFFF" stroke="#0D1B3D" stroke-width="4"/>
+  <rect x="66" y="50" width="184" height="28" rx="8" fill="#DCEBFF"/>
+  <path d="M80 55 L86 62 L80 69 L74 62 Z" fill="#0B5CFF" stroke="#0D1B3D" stroke-width="2.4"/>
+  <text x="96" y="69" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#0D1B3D">Pen Tool (P)</text>
+  <rect x="74" y="88" width="13" height="11" rx="2" stroke="#1E3C8F" stroke-width="2.6"/>
+  <text x="96" y="99" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="600" fill="#12275E">Rectangle Tool</text>
+  <ellipse cx="80.5" cy="123" rx="7" ry="5.5" stroke="#1E3C8F" stroke-width="2.6"/>
+  <text x="96" y="128" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="600" fill="#12275E">Ellipse Tool</text>
+</svg>

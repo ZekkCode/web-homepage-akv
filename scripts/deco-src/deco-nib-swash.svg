@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 200" fill="none">
+  <!-- Mata pena + goresan tinta (palet AKV) -->
+  <!-- grip pena kanan-atas -->
+  <rect x="146" y="8" width="56" height="46" rx="13" transform="rotate(38 174 31)" fill="#1E3C8F"/>
+  <!-- badan nib mengarah kiri-bawah -->
+  <path d="M44 132 C 58 96 86 62 124 44 L 164 84 C 150 124 118 152 82 158 C 70 150 54 142 44 132 Z"
+        fill="#0B5CFF" stroke="#0D1B3D" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="112" cy="96" r="12" fill="#FFFFFF" stroke="#0D1B3D" stroke-width="5"/>
+  <path d="M44 132 L 102 105" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+  <!-- swash tinta -->
+  <path d="M18 168 C 70 152 178 148 206 158 C 216 162 210 170 186 172 C 140 176 84 180 46 176"
+        stroke="#1E3C8F" stroke-width="5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin-akv
+Disallow: /admin
+Disallow: /login
+
+Sitemap: https://arahkaryavisual.id/sitemap.xml

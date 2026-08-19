@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 380" fill="none">
+  <!-- Toolbar vertikal ala aplikasi desain (palet AKV) -->
+  <rect x="4" y="4" width="56" height="372" rx="15" fill="#FFFFFF" stroke="#0D1B3D" stroke-width="4"/>
+  <g stroke="#1E3C8F" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- kursor seleksi -->
+    <path d="M26 21 L40 32 L33 33.5 L37 41.5 L32.5 43.5 L28.5 35.5 L24 40 Z" fill="#1E3C8F" stroke="none"/>
+    <!-- marquee -->
+    <rect x="24" y="56" width="16" height="16" rx="2" stroke-dasharray="4 3"/>
+    <!-- crop -->
+    <path d="M26 88 V110 H48 M20 94 H42 V116"/>
+    <!-- eyedropper -->
+    <path d="M25 141 L36 130 M36 130 l4.5 -4.5 a3.2 3.2 0 0 1 4.5 4.5 L40.5 134.5 Z" />
+    <!-- kuas -->
+    <path d="M27 172 L39 158 M24 176 c-1.5 3 1 5.5 4 4 c2 -1 2.5 -3.5 1 -5.5 Z"/>
+    <!-- penghapus -->
+    <rect x="23.5" y="194" width="17" height="12" rx="2.5" transform="rotate(-22 32 200)"/>
+    <!-- pen tool (aktif) -->
+    <rect x="14" y="222" width="36" height="26" rx="8" fill="#DCEBFF" stroke="none"/>
+    <path d="M32 225 L40 235 L32 244 L24 235 Z" fill="#0B5CFF" stroke="#0D1B3D"/>
+    <circle cx="32" cy="235" r="2.6" fill="#FFFFFF" stroke="none"/>
+    <!-- teks -->
+    <path d="M25 262 H39 M32 262 V277"/>
+    <!-- zoom -->
+    <circle cx="30" cy="300" r="7"/>
+    <path d="M35.5 305.5 L42 312"/>
+  </g>
+  <!-- chip warna depan/belakang -->
+  <rect x="21" y="330" width="15" height="15" rx="3.5" fill="#0B5CFF" stroke="#0D1B3D" stroke-width="3"/>
+  <rect x="29" y="339" width="15" height="15" rx="3.5" fill="#FFFFFF" stroke="#0D1B3D" stroke-width="3"/>
+</svg>

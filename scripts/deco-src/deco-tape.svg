@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 96" fill="none">
+  <!-- Pita "NEW POST" (palet AKV) -->
+  <g transform="rotate(-5 170 48)">
+    <rect x="-14" y="30" width="368" height="38" fill="#0B5CFF" stroke="#0D1B3D" stroke-width="4"/>
+    <text x="170" y="56" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="800" letter-spacing="3" fill="#FFFFFF">POST • AKV • NEW POST • AKV • NEW</text>
+  </g>
+</svg>
