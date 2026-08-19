@@ -1,9 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://akv.zakariamp.id/</loc>
     <lastmod>2026-08-19</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/logo-akv.webp</image:loc>
+      <image:title>Logo Resmi AKV — Arah Karya Visual</image:title>
+      <image:caption>Logo resmi dan identitas visual studio AKV (Arah Karya Visual)</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-present.webp</image:loc>
+      <image:title>Pegi — Maskot Resmi AKV</image:title>
+      <image:caption>Pegi si maskot dinamis Arah Karya Visual</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-wave.webp</image:loc>
+      <image:title>Pegi Melambai — AKV Visual Studio</image:title>
+      <image:caption>Maskot Pegi menyambut pengunjung di AKV</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-tablet.webp</image:loc>
+      <image:title>Pegi Digital Tablet AKV</image:title>
+      <image:caption>Pegi dengan tablet digital untuk desain & branding kreatif</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-megaphone.webp</image:loc>
+      <image:title>Pegi Megafon — Promo & Call to Action AKV</image:title>
+      <image:caption>Pegi mengajak kolaborasi proyek kreatif visual</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/#layanan</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/#portofolio</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/#proses</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/#tentang</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/#keunggulan</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/#testimoni</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/#kontak</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/?lang=id</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://akv.zakariamp.id/?lang=en</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
