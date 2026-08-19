@@ -56,28 +56,38 @@ export default function About() {
 
             {/* Founder credits — inline after copy */}
             <Reveal delay={0.26}>
-              <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2.5 sm:mt-7 sm:gap-x-7">
-                {teamMembers.map((member) => {
-                  const Tag = member.url ? 'a' : 'span'
-                  const linkProps = member.url
-                    ? { href: member.url, target: '_blank', rel: 'noopener noreferrer' }
-                    : {}
-                  return (
-                    <li key={member.name} className="flex items-center gap-2.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-akv-pale text-[10px] font-bold text-akv-blue sm:h-8 sm:w-8 sm:text-xs">
-                        {member.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                      </span>
-                      <Tag
-                        {...linkProps}
-                        className={`leading-tight ${member.url ? 'transition-colors hover:text-akv-blue' : ''}`}
+              <div className="mt-5 sm:mt-7">
+                <p className="text-[11px] font-extrabold uppercase tracking-widest text-akv-navy/45 mb-2.5">
+                  {locale === 'id' ? 'Pendiri & Tim Kreatif' : 'Founders & Creative Team'}
+                </p>
+                <ul className="flex flex-wrap gap-x-5 gap-y-3 sm:gap-x-7">
+                  {teamMembers.map((member) => {
+                    const Tag = member.url ? 'a' : 'span'
+                    const linkProps = member.url
+                      ? { href: member.url, target: '_blank', rel: 'noopener noreferrer', itemProp: 'url' }
+                      : {}
+                    return (
+                      <li
+                        key={member.name}
+                        itemScope
+                        itemType="https://schema.org/Person"
+                        className="flex items-center gap-2.5"
                       >
-                        <span className="block text-sm font-bold text-akv-navy sm:text-sm">{member.name}</span>
-                        <span className="block text-[11px] text-akv-navy/50 sm:text-[11px]">{member.role}</span>
-                      </Tag>
-                    </li>
-                  )
-                })}
-              </ul>
+                        <span aria-hidden="true" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-akv-pale text-[10px] font-bold text-akv-blue sm:h-8 sm:w-8 sm:text-xs">
+                          {member.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                        </span>
+                        <Tag
+                          {...linkProps}
+                          className={`leading-tight ${member.url ? 'transition-colors hover:text-akv-blue' : ''}`}
+                        >
+                          <span itemProp="name" className="block text-sm font-bold text-akv-navy sm:text-sm">{member.name}</span>
+                          <span itemProp="jobTitle" className="block text-[11px] text-akv-navy/50 sm:text-[11px]">{member.role}</span>
+                        </Tag>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
             </Reveal>
           </div>
         </div>

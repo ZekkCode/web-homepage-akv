@@ -15,8 +15,8 @@
       name="description"
       content="AKV (Arah Karya Visual) | Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI. Arahkan Konten, Urus Visual."
     />
-    <meta name="keywords" content="desain grafis, branding, logo, CV, portofolio, website, animasi AI, editing video, konten media sosial, UMKM, personal brand, AKV, Arah Karya Visual, zakariamp" />
-    <meta name="author" content="AKV - Arah Karya Visual" />
+    <meta name="keywords" content="AKV, Arah Karya Visual, AKU.visual, Zakaria Mujur Prasetyo, Lia Nur Khasanah, Zakaria MP, ZekkCode, zakariamp.id, lianurkhasanah.my.id, desain grafis, branding, logo, CV, portofolio, website, animasi AI, editing video, UMKM, personal brand" />
+    <meta name="author" content="Lia Nur Khasanah & Zakaria Mujur Prasetyo (AKV - Arah Karya Visual)" />
     <meta name="robots" content="index, follow" />
 
     <!-- Canonical -->
@@ -31,7 +31,7 @@
     <meta property="og:url" content="https://akv.zakariamp.id/" />
     <meta property="og:site_name" content="AKV - Arah Karya Visual" />
     <meta property="og:title" content="AKV - Arah Karya Visual | Jasa Desain, Branding & Website" />
-    <meta property="og:description" content="Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI. Arahkan Konten, Urus Visual." />
+    <meta property="og:description" content="Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI oleh Lia Nur Khasanah & Zakaria Mujur Prasetyo. Arahkan Konten, Urus Visual." />
     <meta property="og:image" content="https://akv.zakariamp.id/assets/logo-akv.webp" />
     <meta property="og:image:secure_url" content="https://akv.zakariamp.id/assets/logo-akv.webp" />
     <meta property="og:image:type" content="image/webp" />
@@ -44,7 +44,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://akv.zakariamp.id/" />
     <meta name="twitter:title" content="AKV - Arah Karya Visual | Jasa Desain, Branding & Website" />
-    <meta name="twitter:description" content="Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI. Arahkan Konten, Urus Visual." />
+    <meta name="twitter:description" content="Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI oleh Lia Nur Khasanah & Zakaria Mujur Prasetyo. Arahkan Konten, Urus Visual." />
     <meta name="twitter:image" content="https://akv.zakariamp.id/assets/logo-akv.webp" />
     <meta name="twitter:image:alt" content="Logo Resmi AKV - Arah Karya Visual" />
 
@@ -52,18 +52,69 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "AKV - Arah Karya Visual",
-      "url": "https://akv.zakariamp.id",
-      "logo": "https://akv.zakariamp.id/assets/logo-akv.webp",
-      "image": "https://akv.zakariamp.id/assets/logo-akv.webp",
-      "description": "Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI untuk pelajar, mahasiswa, UMKM, dan personal brand.",
-      "foundingDate": "2023",
-      "areaServed": "ID",
-      "serviceType": ["Desain Grafis", "Branding", "Logo", "CV & Portofolio", "Website", "Animasi AI", "Editing Video", "Konten Media Sosial"],
-      "sameAs": [
-        "https://instagram.com/akv.visual",
-        "https://tiktok.com/@akv.visual"
+      "@graph": [
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://akv.zakariamp.id/#organization",
+          "name": "AKV - Arah Karya Visual",
+          "alternateName": ["AKV", "Arah Karya Visual", "AKU.visual"],
+          "url": "https://akv.zakariamp.id",
+          "logo": "https://akv.zakariamp.id/assets/logo-akv.webp",
+          "image": "https://akv.zakariamp.id/assets/logo-akv.webp",
+          "description": "Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI untuk pelajar, mahasiswa, UMKM, dan personal brand.",
+          "foundingDate": "2023",
+          "areaServed": "ID",
+          "founder": [
+            {
+              "@type": "Person",
+              "name": "Lia Nur Khasanah",
+              "jobTitle": "Founder · Creative Director",
+              "url": "https://lianurkhasanah.my.id",
+              "sameAs": [
+                "https://lianurkhasanah.my.id"
+              ]
+            },
+            {
+              "@type": "Person",
+              "name": "Zakaria Mujur Prasetyo",
+              "alternateName": ["Zakaria MP", "ZekkCode"],
+              "jobTitle": "Co-Founder · Visual Designer",
+              "url": "https://zdekktech.biz.id/about",
+              "sameAs": [
+                "https://zdekktech.biz.id/about",
+                "https://zakariamp.id",
+                "https://github.com/ZekkCode"
+              ]
+            }
+          ],
+          "serviceType": ["Desain Grafis", "Branding", "Logo", "CV & Portofolio", "Website", "Animasi AI", "Editing Video", "Konten Media Sosial"],
+          "sameAs": [
+            "https://instagram.com/akv.visual",
+            "https://tiktok.com/@akv.visual",
+            "https://github.com/ZekkCode/web-homepage-akv"
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://lianurkhasanah.my.id/#person",
+          "name": "Lia Nur Khasanah",
+          "jobTitle": "Founder · Creative Director",
+          "worksFor": { "@id": "https://akv.zakariamp.id/#organization" },
+          "url": "https://lianurkhasanah.my.id"
+        },
+        {
+          "@type": "Person",
+          "@id": "https://zdekktech.biz.id/about/#person",
+          "name": "Zakaria Mujur Prasetyo",
+          "alternateName": ["Zakaria MP", "ZekkCode"],
+          "jobTitle": "Co-Founder · Visual Designer",
+          "worksFor": { "@id": "https://akv.zakariamp.id/#organization" },
+          "url": "https://zdekktech.biz.id/about",
+          "sameAs": [
+            "https://zakariamp.id",
+            "https://github.com/ZekkCode"
+          ]
+        }
       ]
     }
     </script>
