@@ -478,7 +478,7 @@ function BrowserPanel() {
         <span className="h-2.5 w-2.5 rounded-full bg-akv-blue/50" />
         <span className="h-2.5 w-2.5 rounded-full bg-akv-royal/40" />
         <div className="ml-3 flex h-6 flex-1 items-center rounded-full bg-white px-3 text-[10px] font-semibold tracking-wide text-akv-navy/45">
-          arahkaryavisual.id
+          akv.zakariamp.id
         </div>
       </div>
       {/* canvas area */}

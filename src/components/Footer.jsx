@@ -116,7 +116,7 @@ export default function Footer() {
           className="mt-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
         >
           <p className="text-xs font-medium text-akv-navy/55">
-            © {year} AKV Arah Karya Visual. {t(locale, 'footer.copyright')} · <Link to={import.meta.env.VITE_ADMIN_ROUTE || '/admin-akv'} className="font-semibold text-akv-navy/45 transition-colors hover:text-akv-blue">{t(locale, 'footer.admin')}</Link>
+            © {year} AKV Arah Karya Visual. {t(locale, 'footer.copyright')}
           </p>
           <p className="text-xs font-extrabold tracking-wide text-akv-blue">
             {t(locale, 'footer.tagline')}

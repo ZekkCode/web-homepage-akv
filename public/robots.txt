@@ -4,4 +4,4 @@ Disallow: /admin-akv
 Disallow: /admin
 Disallow: /login
 
-Sitemap: https://arahkaryavisual.id/sitemap.xml
+Sitemap: https://akv.zakariamp.id/sitemap.xml

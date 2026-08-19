@@ -30,12 +30,12 @@ function sitemapPlugin() {
       })
     },
     buildStart() {
-      const prodUrl = process.env.VITE_SITE_URL || 'https://arahkaryavisual.id'
+      const prodUrl = process.env.VITE_SITE_URL || 'https://akv.zakariamp.id'
       const adminRoute = process.env.VITE_ADMIN_ROUTE || '/admin-akv'
       writeStaticSitemaps('./public', prodUrl, adminRoute)
     },
     closeBundle() {
-      const prodUrl = process.env.VITE_SITE_URL || 'https://arahkaryavisual.id'
+      const prodUrl = process.env.VITE_SITE_URL || 'https://akv.zakariamp.id'
       const adminRoute = process.env.VITE_ADMIN_ROUTE || '/admin-akv'
       writeStaticSitemaps('./dist', prodUrl, adminRoute)
     },
