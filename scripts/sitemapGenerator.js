@@ -5,6 +5,15 @@ export function getTodayDate() {
   return new Date().toISOString().split('T')[0]
 }
 
+function xmlEscape(str = '') {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
 /**
  * Generator Sitemap Komprehensif dengan Google Image & Multi-Section Indexing
  */
@@ -20,27 +29,27 @@ export function generateSitemap(baseUrl = 'https://akv.zakariamp.id') {
       images: [
         {
           loc: `${cleanBase}/assets/logo-akv.webp`,
-          title: 'Logo Resmi AKV — Arah Karya Visual',
+          title: 'Logo Resmi AKV - Arah Karya Visual',
           caption: 'Logo resmi dan identitas visual studio AKV (Arah Karya Visual)',
         },
         {
           loc: `${cleanBase}/assets/pegi-present.webp`,
-          title: 'Pegi — Maskot Resmi AKV',
+          title: 'Pegi - Maskot Resmi AKV',
           caption: 'Pegi si maskot dinamis Arah Karya Visual',
         },
         {
           loc: `${cleanBase}/assets/pegi-wave.webp`,
-          title: 'Pegi Melambai — AKV Visual Studio',
+          title: 'Pegi Melambai - AKV Visual Studio',
           caption: 'Maskot Pegi menyambut pengunjung di AKV',
         },
         {
           loc: `${cleanBase}/assets/pegi-tablet.webp`,
           title: 'Pegi Digital Tablet AKV',
-          caption: 'Pegi dengan tablet digital untuk desain & branding kreatif',
+          caption: 'Pegi dengan tablet digital untuk desain dan branding kreatif',
         },
         {
           loc: `${cleanBase}/assets/pegi-megaphone.webp`,
-          title: 'Pegi Megafon — Promo & Call to Action AKV',
+          title: 'Pegi Megafon - Promo dan Call to Action AKV',
           caption: 'Pegi mengajak kolaborasi proyek kreatif visual',
         },
       ],
@@ -100,16 +109,16 @@ export function generateSitemap(baseUrl = 'https://akv.zakariamp.id') {
           .map(
             (img) => `
     <image:image>
-      <image:loc>${img.loc}</image:loc>
-      <image:title>${img.title}</image:title>
-      <image:caption>${img.caption}</image:caption>
+      <image:loc>${xmlEscape(img.loc)}</image:loc>
+      <image:title>${xmlEscape(img.title)}</image:title>
+      <image:caption>${xmlEscape(img.caption)}</image:caption>
     </image:image>`
           )
           .join('')
       }
 
       return `  <url>
-    <loc>${page.loc}</loc>
+    <loc>${xmlEscape(page.loc)}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>${imageXml}
