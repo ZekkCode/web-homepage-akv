@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "optimize-assets": "node scripts/optimize-assets.mjs"
+    "optimize-assets": "node scripts/optimize-assets.mjs",
+    "generate-seo-assets": "node scripts/generate-seo-assets.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

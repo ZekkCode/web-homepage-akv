@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { isAuthed, logout } from '../admin/auth.js'
+import { usePageSeo } from '../utils/seo.js'
 import LoginForm from '../admin/LoginForm.jsx'
 import Sidebar from '../admin/Sidebar.jsx'
 import Icon from '../components/ui/Icon.jsx'
@@ -16,8 +17,12 @@ export default function Admin() {
   const [authed, setAuthed] = useState(false)
   const [checking, setChecking] = useState(true)
 
+  usePageSeo({
+    title: 'Admin Dashboard | AKV',
+    robots: 'noindex, nofollow, noarchive',
+  })
+
   useEffect(() => {
-    document.title = 'Admin Dashboard | AKV'
     isAuthed().then((ok) => {
       setAuthed(ok)
       setChecking(false)

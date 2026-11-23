@@ -13,7 +13,7 @@ export default function WhyAkv() {
   const scrollRef = useInfiniteHorizontalScroll([benefits.length])
 
   return (
-    <section className="relative overflow-hidden bg-white py-14 sm:py-20 md:py-28" aria-labelledby="kenapa-heading">
+    <section id="keunggulan" className="relative overflow-hidden bg-white py-14 sm:py-20 md:py-28" aria-labelledby="kenapa-heading">
       <EdgeAsset src="/assets/deco-pen-tool.webp" side="right" bottom="14%" width={155} speed={44} rotate={7} />
       <div className="container-akv relative z-10">
         <SectionHeading

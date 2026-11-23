@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://akv.zakariamp.id/</loc>
+    <lastmod>2026-11-23T10:48:54.173Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/og-akv.webp</image:loc>
+      <image:title>AKV - Arah Karya Visual | Jasa Desain Grafis, Branding &amp; Website</image:title>
+      <image:caption>Banner resmi AKV (Arah Karya Visual) oleh Zakaria Mujur Prasetyo dan Lia Nur Khasanah. Arahkan Konten, Urus Visual.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/logo-akv.webp</image:loc>
+      <image:title>Logo Resmi AKV - Arah Karya Visual</image:title>
+      <image:caption>Logo resmi dan identitas visual studio kreatif AKV (Arah Karya Visual)</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-present.webp</image:loc>
+      <image:title>Pegi - Maskot Resmi AKV Presentasi Layanan</image:title>
+      <image:caption>Pegi, maskot pena digital berkacamata Arah Karya Visual</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-wave.webp</image:loc>
+      <image:title>Pegi Melambai - Studio Kreatif AKV</image:title>
+      <image:caption>Maskot Pegi menyambut pengunjung di situs resmi AKV (Arah Karya Visual)</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-tablet.webp</image:loc>
+      <image:title>Pegi Tablet Digital - Desain &amp; Branding AKV</image:title>
+      <image:caption>Pegi memegang tablet digital untuk layanan desain grafis, branding, dan website AKV</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-megaphone.webp</image:loc>
+      <image:title>Pegi Megafon - Mulai Proyek Kreatif Bersama AKV</image:title>
+      <image:caption>Pegi mengajak kolaborasi proyek desain, CV, portofolio, website, dan animasi AI di AKV</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://akv.zakariamp.id/assets/pegi-point.webp</image:loc>
+      <image:title>Pegi Menunjuk - Maskot AKV</image:title>
+      <image:caption>Ilustrasi resmi Pegi maskot AKV (Arah Karya Visual)</image:caption>
+    </image:image>
+  </url>
+</urlset>

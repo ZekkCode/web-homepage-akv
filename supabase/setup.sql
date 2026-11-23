@@ -211,6 +211,6 @@ insert into public.testimonials (id, name, role, quote) values
 on conflict (id) do nothing;
 
 insert into public.team_members (id, name, role, url) values
-  (1, 'Lia Nur Khasanah',       'Founder · Creative Director',    'https://lianurkhasanah.my.id'),
-  (2, 'Zakaria Mujur Prasetyo', 'Co-Founder · Visual Designer',   'https://zdekktech.biz.id/about')
+  (1, 'Zakaria Mujur Prasetyo', 'Owner & Founder · Visual Designer', 'https://zakariamp.id'),
+  (2, 'Lia Nur Khasanah',       'Co-Founder · Creative Director',    'https://lianurkhasanah.my.id')
 on conflict (id) do nothing;

@@ -1,11 +1,15 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from '../components/ui/Icon.jsx'
 import { useLocale, t } from '../data/i18n.js'
+import { usePageSeo } from '../utils/seo.js'
 
 export default function NotFound() {
   const locale = useLocale()
-  useEffect(() => { document.title = t(locale, 'notFound.pageTitle') }, [locale])
+  usePageSeo({
+    title: t(locale, 'notFound.pageTitle'),
+    robots: 'noindex, nofollow',
+    locale,
+  })
 
   return (
     <main className="relative flex h-[100svh] w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white via-akv-pale to-akv-light px-4">

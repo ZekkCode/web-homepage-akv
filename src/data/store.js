@@ -181,6 +181,13 @@ export function useContent() {
   return useSyncExternalStore(subscribe, getContent)
 }
 
+/** Normalisasi nomor WA ke format internasional (tanpa +, awalan 0 -> 62). */
+function normalizeWaNumber(raw = '') {
+  const digits = String(raw).replace(/\D/g, '')
+  if (!digits) return ''
+  return digits.startsWith('0') ? `62${digits.slice(1)}` : digits
+}
+
 /** Link WhatsApp berdasarkan kontak terkini. */
 export const waLink = (text = 'Halo AKV! Saya ingin mulai project.') =>
-  `https://wa.me/${cache.contact.whatsapp}?text=${encodeURIComponent(text)}`
+  `https://wa.me/${normalizeWaNumber(cache.contact.whatsapp)}?text=${encodeURIComponent(text)}`

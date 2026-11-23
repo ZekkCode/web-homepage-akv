@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import {
-  generateSitemap,
+  generateSitemapIndex,
+  generateMainSitemap,
+  generateImagesSitemap,
   generateRobotsTxt,
   writeStaticSitemaps,
 } from './scripts/sitemapGenerator.js'
@@ -12,21 +14,25 @@ function sitemapPlugin() {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url?.split('?')[0]
-        if (!['/sitemap.xml', '/robots.txt'].includes(url)) {
+        const handled = ['/sitemap.xml', '/sitemap-main.xml', '/sitemap-images.xml', '/robots.txt']
+        if (!handled.includes(url)) {
           return next()
         }
 
         const protocol = req.headers['x-forwarded-proto'] || 'http'
         const host = req.headers.host || 'localhost:5173'
         const baseUrl = `${protocol}://${host}`
+        const adminRoute = process.env.VITE_ADMIN_ROUTE || '/admin-akv'
 
         if (url === '/robots.txt') {
           res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-          return res.end(generateRobotsTxt(baseUrl))
+          return res.end(generateRobotsTxt(baseUrl, adminRoute))
         }
 
         res.setHeader('Content-Type', 'application/xml; charset=utf-8')
-        return res.end(generateSitemap(baseUrl))
+        if (url === '/sitemap-main.xml') return res.end(generateMainSitemap(baseUrl))
+        if (url === '/sitemap-images.xml') return res.end(generateImagesSitemap(baseUrl))
+        return res.end(generateSitemapIndex(baseUrl))
       })
     },
     buildStart() {

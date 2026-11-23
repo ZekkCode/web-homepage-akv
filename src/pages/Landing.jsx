@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import useLenis from '../hooks/useLenis.js'
-import { useLocale } from '../data/i18n.js'
+import { useLocale, t } from '../data/i18n.js'
+import { usePageSeo } from '../utils/seo.js'
 import Navbar from '../components/Navbar.jsx'
 import Hero from '../components/Hero.jsx'
 import LogoSequence from '../components/LogoSequence.jsx'
@@ -18,6 +19,14 @@ export default function Landing() {
   // Lenis smooth scroll + GSAP ScrollTrigger sync (khusus landing)
   useLenis()
   const locale = useLocale()
+  const siteUrl = (import.meta.env.VITE_SITE_URL || 'https://akv.zakariamp.id').replace(/\/$/, '')
+
+  usePageSeo({
+    title: t(locale, 'seo.title'),
+    description: t(locale, 'seo.description'),
+    canonical: locale === 'en' ? `${siteUrl}/?lang=en` : `${siteUrl}/`,
+    locale,
+  })
 
   // Navbar muncul saat logo intro merapat ke atas (fase 2)
   const [navVisible, setNavVisible] = useState(false)

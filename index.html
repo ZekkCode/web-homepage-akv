@@ -2,28 +2,60 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
 
-    <!-- Favicon & Apple Touch Icon -->
-    <link rel="icon" type="image/webp" href="/assets/logo-akv.webp" />
-    <link rel="shortcut icon" type="image/webp" href="/assets/logo-akv.webp" />
-    <link rel="apple-touch-icon" href="/assets/logo-akv.webp" />
+    <!-- Preload critical LCP assets -->
+    <link rel="preload" as="image" href="/assets/logo-akv.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/pegi-wave.webp" type="image/webp" />
+
+    <!-- Favicon, Icons & Web App Manifest (WebP only) -->
+    <link rel="icon" type="image/webp" sizes="96x96" href="/favicon.webp" />
+    <link rel="icon" type="image/webp" sizes="192x192" href="/assets/icon-192.webp" />
+    <link rel="shortcut icon" type="image/webp" href="/favicon.webp" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/assets/icon-512.webp" />
+    <link rel="manifest" href="/manifest.webmanifest" />
 
     <!-- Primary Meta -->
-    <title>AKV - Arah Karya Visual | Jasa Desain, Branding & Website</title>
+    <title>AKV - Arah Karya Visual | Jasa Desain Grafis, Branding &amp; Website</title>
     <meta
       name="description"
-      content="AKV (Arah Karya Visual) | Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI. Arahkan Konten, Urus Visual."
+      content="AKV (Arah Karya Visual) oleh Zakaria Mujur Prasetyo &amp; Lia Nur Khasanah. Jasa desain grafis, branding, logo, CV &amp; portofolio, website, video, dan animasi AI."
     />
-    <meta name="keywords" content="AKV, Arah Karya Visual, AKU.visual, Zakaria Mujur Prasetyo, Lia Nur Khasanah, Zakaria MP, ZekkCode, zakariamp.id, lianurkhasanah.my.id, desain grafis, branding, logo, CV, portofolio, website, animasi AI, editing video, UMKM, personal brand" />
-    <meta name="author" content="Lia Nur Khasanah & Zakaria Mujur Prasetyo (AKV - Arah Karya Visual)" />
-    <meta name="robots" content="index, follow" />
+    <meta name="application-name" content="AKV - Arah Karya Visual" />
+    <meta
+      name="keywords"
+      content="AKV, Arah Karya Visual, AKU.visual, Zakaria Mujur Prasetyo, ZakariaMP, ZekkTech, ZekkCode, Lia Nur Khasanah, zakariamp.id, zakariamp.my.id, zekktech.biz.id, lianurkhasanah.my.id, jasa desain grafis, jasa branding, jasa pembuatan logo, jasa CV ATS, jasa portofolio, jasa website portofolio, jasa landing page UMKM, AI visual branding, animasi AI, editing video, konten media sosial, studio desain kreatif Indonesia, Mojokerto"
+    />
+    <link rel="author" href="https://zakariamp.id" />
+    <link rel="author" href="https://www.zakariamp.my.id" />
+    <link rel="author" href="https://zekktech.biz.id" />
+    <link rel="author" href="https://lianurkhasanah.my.id" />
+    <meta name="author" content="Zakaria Mujur Prasetyo &amp; Lia Nur Khasanah (AKV - Arah Karya Visual)" />
+    <meta name="creator" content="Zakaria Mujur Prasetyo (ZakariaMP)" />
+    <meta name="publisher" content="AKV - Arah Karya Visual" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <meta name="category" content="design" />
+    <meta name="classification" content="Creative Agency &amp; Visual Design Studio" />
+    <meta name="format-detection" content="telephone=no, address=no, email=no" />
 
-    <!-- Canonical & Verification -->
+    <!-- Crawling & Indexing Directives -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
+
+    <!-- Geo / Regional SEO (Indonesia - Jawa Timur) -->
+    <meta name="geo.region" content="ID-JI" />
+    <meta name="geo.placename" content="Mojokerto" />
+    <meta name="geo.position" content="-7.4726;112.4385" />
+    <meta name="ICBM" content="-7.4726, 112.4385" />
+
+    <!-- Canonical, Hreflang & Verification -->
     <link rel="canonical" href="https://akv.zakariamp.id/" />
+    <link rel="alternate" hreflang="id-ID" href="https://akv.zakariamp.id/?lang=id" />
+    <link rel="alternate" hreflang="en-US" href="https://akv.zakariamp.id/?lang=en" />
+    <link rel="alternate" hreflang="x-default" href="https://akv.zakariamp.id/" />
     <meta name="google-site-verification" content="mNUjqPrFjJEZuPmVyHclPz8Jtb6Zq26Y03bvCLXeHbY" />
 
-    <!-- Theme color (mobile address bar) -->
+    <!-- Theme color -->
     <meta name="theme-color" content="#0B5CFF" />
     <meta name="msapplication-TileColor" content="#0B5CFF" />
 
@@ -31,89 +63,289 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://akv.zakariamp.id/" />
     <meta property="og:site_name" content="AKV - Arah Karya Visual" />
-    <meta property="og:title" content="AKV - Arah Karya Visual | Jasa Desain, Branding & Website" />
-    <meta property="og:description" content="Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI oleh Lia Nur Khasanah & Zakaria Mujur Prasetyo. Arahkan Konten, Urus Visual." />
-    <meta property="og:image" content="https://akv.zakariamp.id/assets/logo-akv.webp" />
-    <meta property="og:image:secure_url" content="https://akv.zakariamp.id/assets/logo-akv.webp" />
+    <meta property="og:title" content="AKV - Arah Karya Visual | Jasa Desain Grafis, Branding &amp; Website" />
+    <meta
+      property="og:description"
+      content="Jasa desain grafis, branding &amp; logo, CV &amp; portofolio, website, editing video, dan animasi AI oleh Zakaria Mujur Prasetyo (Owner) &amp; Lia Nur Khasanah (Co-Founder). Arahkan Konten, Urus Visual."
+    />
+    <meta property="og:image" content="https://akv.zakariamp.id/assets/og-akv.webp" />
+    <meta property="og:image:secure_url" content="https://akv.zakariamp.id/assets/og-akv.webp" />
     <meta property="og:image:type" content="image/webp" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:image:alt" content="Logo Resmi AKV - Arah Karya Visual" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="AKV - Arah Karya Visual: Jasa Desain Grafis, Branding, Website &amp; Animasi AI" />
     <meta property="og:locale" content="id_ID" />
+    <meta property="og:locale:alternate" content="en_US" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@zakariamp" />
     <meta name="twitter:url" content="https://akv.zakariamp.id/" />
-    <meta name="twitter:title" content="AKV - Arah Karya Visual | Jasa Desain, Branding & Website" />
-    <meta name="twitter:description" content="Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI oleh Lia Nur Khasanah & Zakaria Mujur Prasetyo. Arahkan Konten, Urus Visual." />
-    <meta name="twitter:image" content="https://akv.zakariamp.id/assets/logo-akv.webp" />
-    <meta name="twitter:image:alt" content="Logo Resmi AKV - Arah Karya Visual" />
+    <meta name="twitter:title" content="AKV - Arah Karya Visual | Jasa Desain Grafis, Branding &amp; Website" />
+    <meta
+      name="twitter:description"
+      content="Jasa desain grafis, branding &amp; logo, CV &amp; portofolio, website, editing video, dan animasi AI oleh Zakaria Mujur Prasetyo &amp; Lia Nur Khasanah. Arahkan Konten, Urus Visual."
+    />
+    <meta name="twitter:image" content="https://akv.zakariamp.id/assets/og-akv.webp" />
+    <meta name="twitter:image:alt" content="AKV - Arah Karya Visual: Jasa Desain Grafis, Branding, Website &amp; Animasi AI" />
 
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
+    <!-- JSON-LD Structured Data (@graph terhubung ke ekosistem zakariamp.id, zakariamp.my.id, zekktech.biz.id & lianurkhasanah.my.id) -->
+    <script id="structured-data" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://akv.zakariamp.id/#website",
+          "url": "https://akv.zakariamp.id/",
+          "name": "AKV - Arah Karya Visual",
+          "alternateName": ["AKV", "Arah Karya Visual", "AKU.visual"],
+          "description": "AKV (Arah Karya Visual) oleh Zakaria Mujur Prasetyo & Lia Nur Khasanah. Jasa desain grafis, branding, logo, CV & portofolio, website, video, dan animasi AI.",
+          "inLanguage": ["id-ID", "en-US"],
+          "publisher": { "@id": "https://akv.zakariamp.id/#organization" },
+          "author": { "@id": "https://www.zakariamp.my.id/#person" }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://akv.zakariamp.id/#webpage",
+          "url": "https://akv.zakariamp.id/",
+          "name": "AKV - Arah Karya Visual | Jasa Desain Grafis, Branding & Website",
+          "description": "Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI untuk pelajar, mahasiswa, organisasi, UMKM, dan personal brand.",
+          "inLanguage": "id-ID",
+          "isPartOf": { "@id": "https://akv.zakariamp.id/#website" },
+          "about": { "@id": "https://akv.zakariamp.id/#organization" },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://akv.zakariamp.id/assets/og-akv.webp",
+            "width": 1200,
+            "height": 630
+          },
+          "breadcrumb": { "@id": "https://akv.zakariamp.id/#breadcrumb" }
+        },
         {
           "@type": "ProfessionalService",
           "@id": "https://akv.zakariamp.id/#organization",
           "name": "AKV - Arah Karya Visual",
           "alternateName": ["AKV", "Arah Karya Visual", "AKU.visual"],
-          "url": "https://akv.zakariamp.id",
-          "logo": "https://akv.zakariamp.id/assets/logo-akv.webp",
-          "image": "https://akv.zakariamp.id/assets/logo-akv.webp",
-          "description": "Jasa desain grafis, branding & logo, CV & portofolio, website, editing video, dan animasi AI untuk pelajar, mahasiswa, UMKM, dan personal brand.",
-          "foundingDate": "2023",
-          "areaServed": "ID",
-          "founder": [
-            {
-              "@type": "Person",
-              "name": "Lia Nur Khasanah",
-              "jobTitle": "Founder · Creative Director",
-              "url": "https://lianurkhasanah.my.id",
-              "sameAs": [
-                "https://lianurkhasanah.my.id"
-              ]
-            },
-            {
-              "@type": "Person",
-              "name": "Zakaria Mujur Prasetyo",
-              "alternateName": ["Zakaria MP", "ZekkCode"],
-              "jobTitle": "Co-Founder · Visual Designer",
-              "url": "https://zdekktech.biz.id/about",
-              "sameAs": [
-                "https://zdekktech.biz.id/about",
-                "https://zakariamp.id",
-                "https://github.com/ZekkCode"
-              ]
-            }
+          "slogan": "Arahkan Konten, Urus Visual.",
+          "url": "https://akv.zakariamp.id/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://akv.zakariamp.id/assets/logo-akv.webp",
+            "width": 1200,
+            "height": 709
+          },
+          "image": [
+            "https://akv.zakariamp.id/assets/og-akv.webp",
+            "https://akv.zakariamp.id/assets/logo-akv.webp",
+            "https://akv.zakariamp.id/assets/pegi-present.webp"
           ],
-          "serviceType": ["Desain Grafis", "Branding", "Logo", "CV & Portofolio", "Website", "Animasi AI", "Editing Video", "Konten Media Sosial"],
+          "description": "AKV (Arah Karya Visual) adalah studio jasa kreatif Indonesia yang didirikan oleh Zakaria Mujur Prasetyo (Owner & Founder) bersama Lia Nur Khasanah (Co-Founder). Melayani desain grafis, branding & logo, CV & portofolio, website, AI visual branding, animasi AI, editing video, dan konten media sosial.",
+          "foundingDate": "2023",
+          "email": "halo@akv.zakariamp.id",
+          "telephone": "+62881081772005",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Mojokerto",
+            "addressRegion": "Jawa Timur",
+            "addressCountry": "ID"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "Indonesia"
+          },
+          "founder": [
+            { "@id": "https://www.zakariamp.my.id/#person" },
+            { "@id": "https://lianurkhasanah.my.id/#person" }
+          ],
+          "serviceType": [
+            "Desain Grafis",
+            "Branding dan Logo",
+            "CV dan Portofolio",
+            "Website Portofolio",
+            "AI Visual Branding",
+            "Animasi AI",
+            "Editing Video",
+            "Konten Media Sosial"
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Layanan Kreatif AKV - Arah Karya Visual",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Desain Grafis",
+                  "description": "Poster, banner, feed, dan kebutuhan visual harian yang rapi dan konsisten."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Branding dan Logo",
+                  "description": "Identitas visual lengkap: logo, warna, dan guideline yang siap dipakai."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "CV dan Portofolio",
+                  "description": "CV ATS-friendly dan portofolio yang bikin profilmu tampil menonjol."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Website Portofolio",
+                  "description": "Website personal atau bisnis yang responsif, cepat, dan mudah dikelola."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "AI Visual Branding",
+                  "description": "Eksplorasi visual berbasis AI yang tetap diarahkan dengan sentuhan desainer."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Animasi AI",
+                  "description": "Animasi pendek untuk intro brand, konten, dan presentasi yang hidup."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Editing Video",
+                  "description": "Editing reels, konten pendek, dan video promosi dengan pacing yang pas."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Konten Media Sosial",
+                  "description": "Template feed dan konten sosial media yang terarah dan on-brand."
+                }
+              }
+            ]
+          },
           "sameAs": [
             "https://instagram.com/akuvisual.id",
             "https://tiktok.com/@akuvisual.id",
-            "https://github.com/ZekkCode/web-homepage-akv"
+            "https://github.com/ZekkCode/web-homepage-akv",
+            "https://zakariamp.id",
+            "https://www.zakariamp.my.id",
+            "https://zekktech.biz.id",
+            "https://lianurkhasanah.my.id"
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://www.zakariamp.my.id/#person",
+          "name": "Zakaria Mujur Prasetyo",
+          "alternateName": ["ZakariaMP", "Zakaria MP", "Zekk", "ZekkTech", "ZekkCode", "zekksparow"],
+          "jobTitle": "Owner & Founder · Visual Designer",
+          "description": "Owner dan Founder AKV (Arah Karya Visual), UI/UX Designer dan Frontend Developer asal Mojokerto, Jawa Timur.",
+          "url": "https://www.zakariamp.my.id",
+          "email": "zakariamujur6@gmail.com",
+          "telephone": "+62881081772005",
+          "worksFor": { "@id": "https://akv.zakariamp.id/#organization" },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Mojokerto",
+            "addressRegion": "Jawa Timur",
+            "addressCountry": "ID"
+          },
+          "alumniOf": [
+            { "@type": "EducationalOrganization", "name": "Universitas Trunojoyo Madura" },
+            { "@type": "EducationalOrganization", "name": "SMK Negeri 1 Jetis" }
+          ],
+          "knowsLanguage": ["id", "en"],
+          "knowsAbout": [
+            "UI/UX & Desain Sistem",
+            "Frontend Web Development",
+            "Identitas Visual & Grafis",
+            "Branding",
+            "Figma",
+            "React",
+            "Next.js",
+            "TypeScript",
+            "Tailwind CSS"
+          ],
+          "sameAs": [
+            "https://zakariamp.id",
+            "https://www.zakariamp.my.id",
+            "https://zekktech.biz.id",
+            "https://zekktech.biz.id/about",
+            "https://github.com/ZekkCode",
+            "https://www.linkedin.com/in/zakariamp",
+            "https://www.behance.net/zakariamp",
+            "https://dribbble.com/zakariamp",
+            "https://www.instagram.com/zekksparow",
+            "https://www.tiktok.com/@zekksparow",
+            "https://dev.to/zakariamp",
+            "https://medium.com/@zakariamp",
+            "https://hashnode.com/@zakariamp",
+            "https://scholar.google.com/citations?user=nhYCbGEAAAAJ",
+            "https://orcid.org/0009-0007-9676-4994",
+            "https://www.awwwards.com/zakariamp/",
+            "https://contra.com/zakariamp"
           ]
         },
         {
           "@type": "Person",
           "@id": "https://lianurkhasanah.my.id/#person",
           "name": "Lia Nur Khasanah",
-          "jobTitle": "Founder · Creative Director",
+          "jobTitle": "Co-Founder · Creative Director",
+          "description": "Co-Founder dan Creative Director AKV (Arah Karya Visual), Content Writer, Copywriter, Social Media Specialist, dan Voice Over Talent.",
+          "url": "https://lianurkhasanah.my.id",
           "worksFor": { "@id": "https://akv.zakariamp.id/#organization" },
-          "url": "https://lianurkhasanah.my.id"
+          "knowsLanguage": ["id", "en"],
+          "knowsAbout": [
+            "Creative Direction",
+            "Content Writing",
+            "Copywriting",
+            "Social Media Specialist",
+            "Voice Over",
+            "Brand Storytelling"
+          ],
+          "sameAs": [
+            "https://lianurkhasanah.my.id"
+          ]
         },
         {
-          "@type": "Person",
-          "@id": "https://zdekktech.biz.id/about/#person",
-          "name": "Zakaria Mujur Prasetyo",
-          "alternateName": ["Zakaria MP", "ZekkCode"],
-          "jobTitle": "Co-Founder · Visual Designer",
-          "worksFor": { "@id": "https://akv.zakariamp.id/#organization" },
-          "url": "https://zdekktech.biz.id/about",
-          "sameAs": [
-            "https://zakariamp.id",
-            "https://github.com/ZekkCode"
+          "@type": "ItemList",
+          "@id": "https://akv.zakariamp.id/#process",
+          "name": "Lima Langkah Proses Kerja AKV",
+          "itemListOrder": "https://schema.org/ItemListOrderAscending",
+          "numberOfItems": 5,
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Diskusi dan Brief", "description": "Ceritakan kebutuhan dan tujuanmu, kami dengarkan dan catat detailnya." },
+            { "@type": "ListItem", "position": 2, "name": "Riset dan Konsep", "description": "Kami riset referensi dan susun arah visual yang paling pas." },
+            { "@type": "ListItem", "position": 3, "name": "Proses Visual", "description": "Eksekusi desain dimulai, progres selalu kami komunikasikan." },
+            { "@type": "ListItem", "position": 4, "name": "Revisi", "description": "Masukanmu kami rapikan sampai hasilnya benar-benar sesuai." },
+            { "@type": "ListItem", "position": 5, "name": "Final dan Delivery", "description": "File final dikirim lengkap dengan format yang siap dipakai." }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://akv.zakariamp.id/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Beranda",
+              "item": "https://akv.zakariamp.id/"
+            }
           ]
         }
       ]
@@ -131,10 +363,31 @@
   <body>
     <div id="root"></div>
     <noscript>
-      <div style="padding:2rem;text-align:center;font-family:system-ui,sans-serif">
-        <h1>AKV - Arah Karya Visual</h1>
-        <p>Situs ini membutuhkan JavaScript untuk berfungsi. Aktifkan JavaScript di browser kamu, lalu muat ulang halaman.</p>
-      </div>
+      <main style="max-width:720px;margin:0 auto;padding:2.5rem 1.5rem;font-family:system-ui,sans-serif;color:#0D1B3D;line-height:1.6">
+        <h1>AKV - Arah Karya Visual: Arahkan Konten, Urus Visual.</h1>
+        <p>
+          AKV (Arah Karya Visual) adalah studio jasa kreatif Indonesia sejak 2023 yang didirikan oleh
+          <strong>Zakaria Mujur Prasetyo</strong> (Owner &amp; Founder) bersama
+          <strong>Lia Nur Khasanah</strong> (Co-Founder &amp; Creative Director).
+        </p>
+        <h2>Layanan Kreatif AKV</h2>
+        <ul>
+          <li>Desain Grafis: Poster, banner, feed, dan kebutuhan visual harian yang rapi dan konsisten.</li>
+          <li>Branding dan Logo: Identitas visual lengkap, logo, warna, dan guideline.</li>
+          <li>CV dan Portofolio: CV ATS-friendly dan portofolio profesional.</li>
+          <li>Website Portofolio: Website personal atau bisnis yang responsif dan cepat.</li>
+          <li>AI Visual Branding dan Animasi AI.</li>
+          <li>Editing Video dan Konten Media Sosial.</li>
+        </ul>
+        <h2>Pendiri &amp; Ekosistem</h2>
+        <ul>
+          <li><a href="https://zakariamp.id">Zakaria Mujur Prasetyo (Owner &amp; Founder) - zakariamp.id</a></li>
+          <li><a href="https://www.zakariamp.my.id">Portofolio ZakariaMP - zakariamp.my.id</a></li>
+          <li><a href="https://zekktech.biz.id">ZekkTech Blog Teknologi - zekktech.biz.id</a></li>
+          <li><a href="https://lianurkhasanah.my.id">Lia Nur Khasanah (Co-Founder &amp; Creative Director) - lianurkhasanah.my.id</a></li>
+        </ul>
+        <p>Aktifkan JavaScript di browser kamu untuk menikmati pengalaman interaktif penuh di situs AKV.</p>
+      </main>
     </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>

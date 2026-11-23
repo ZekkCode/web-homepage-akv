@@ -1,7 +1,30 @@
-User-agent: *
+User-Agent: *
 Allow: /
 Disallow: /admin-akv
+Disallow: /admin-akv/
 Disallow: /admin
+Disallow: /admin/
 Disallow: /login
+Disallow: /api/
+Disallow: /private/
 
+User-Agent: Googlebot
+User-Agent: Googlebot-Image
+User-Agent: Bingbot
+User-Agent: Slurp
+User-Agent: DuckDuckBot
+User-Agent: Baiduspider
+User-Agent: YandexBot
+User-Agent: Applebot
+User-Agent: Bravebot
+Allow: /
+Disallow: /admin-akv
+Disallow: /admin-akv/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /login
+Disallow: /api/
+Disallow: /private/
+
+Host: https://akv.zakariamp.id
 Sitemap: https://akv.zakariamp.id/sitemap.xml

@@ -15,7 +15,7 @@ import { useSyncExternalStore, useEffect } from 'react'
 
 function getLocaleFromURL() {
   const params = new URLSearchParams(window.location.search)
-  const loc = params.get('locale')
+  const loc = params.get('lang') || params.get('locale')
   return loc === 'en' ? 'en' : 'id'
 }
 
@@ -43,11 +43,12 @@ export function subscribe(fn) {
   return () => listeners.delete(fn)
 }
 
-/** Switch locale — push ke URL tanpa reload. */
+/** Switch locale — push ke URL tanpa reload (?lang=en, sinkron dengan hreflang & sitemap). */
 export function setLocale(loc) {
   const url = new URL(window.location.href)
-  if (loc === 'id') url.searchParams.delete('locale')
-  else url.searchParams.set('locale', loc)
+  url.searchParams.delete('locale')
+  if (loc === 'id') url.searchParams.delete('lang')
+  else url.searchParams.set('lang', loc)
   window.history.pushState({}, '', url.toString())
   currentLocale = loc
   emit()
@@ -67,6 +68,10 @@ export function useLocale() {
 
 const strings = {
   id: {
+    // SEO
+    'seo.title': 'AKV - Arah Karya Visual | Jasa Desain Grafis, Branding & Website',
+    'seo.description': 'AKV (Arah Karya Visual) oleh Zakaria Mujur Prasetyo & Lia Nur Khasanah. Jasa desain grafis, branding, logo, CV & portofolio, website, video, dan animasi AI.',
+
     // Navbar
     'nav.startProject': 'Mulai Proyek',
     'nav.openMenu': 'Buka menu',
@@ -114,7 +119,7 @@ const strings = {
     // Services
     'services.eyebrow': 'Layanan',
     'services.title': 'Semua Kebutuhan Visual, Satu Arah',
-    'services.desc': 'Dari desain harian sampai website dan animasi — pilih layanan yang kamu butuhkan, sisanya kami urus.',
+    'services.desc': 'Dari desain harian sampai website dan animasi, pilih layanan yang kamu butuhkan, sisanya kami urus.',
     'services.items': [
       { icon: 'palette', title: 'Desain Grafis', desc: 'Poster, banner, feed, dan kebutuhan visual harian yang rapi dan konsisten.' },
       { icon: 'badge', title: 'Branding dan Logo', desc: 'Identitas visual lengkap: logo, warna, dan guideline yang siap dipakai.' },
@@ -162,7 +167,7 @@ const strings = {
     // Why AKV
     'why.eyebrow': 'Kenapa AKV?',
     'why.title': 'Beda Dari Yang Lain',
-    'why.desc': 'Empat hal yang selalu kami jaga di setiap project — apa pun skalanya.',
+    'why.desc': 'Empat hal yang selalu kami jaga di setiap project, apa pun skalanya.',
     'why.benefits': [
       { icon: 'compass', title: 'Strategi Visual', desc: 'Setiap karya dimulai dari arah yang jelas, bukan sekadar bagus dilihat.' },
       { icon: 'gem', title: 'Desain Berkualitas', desc: 'Detail dirapikan, hierarki dijaga, hasil akhir konsisten dengan brand.' },
@@ -177,7 +182,7 @@ const strings = {
 
     // CTA
     'cta.title': 'Punya Ide Yang Ingin Divisualkan?',
-    'cta.desc': 'Ceritakan kebutuhanmu — mulai project bersama AKV.',
+    'cta.desc': 'Ceritakan kebutuhanmu, mulai project bersama AKV.',
     'cta.btn1': 'Mulai Proyek',
     'cta.btn2': 'Hubungi AKV',
     'cta.pegiAlt': 'Pegi memegang megafon, mengajak memulai project bersama AKV',
@@ -199,7 +204,7 @@ const strings = {
     'error.reload': 'Muat Ulang',
     'error.home': 'Ke Beranda',
 
-    'notFound.pageTitle': '404 — Halaman Tidak Ditemukan | AKV',
+    'notFound.pageTitle': '404 - Halaman Tidak Ditemukan | AKV',
     'notFound.eyebrow': 'Error 404',
     'notFound.title1': 'Waduh, halamannya ',
     'notFound.title2': 'tidak ketemu.',
@@ -215,6 +220,10 @@ const strings = {
   },
 
   en: {
+    // SEO
+    'seo.title': 'AKV - Arah Karya Visual | Graphic Design, Branding & Website Studio',
+    'seo.description': 'AKV (Arah Karya Visual) by Zakaria Mujur Prasetyo & Lia Nur Khasanah. Graphic design, branding & logo, CV & portfolio, websites, video editing, and AI animation.',
+
     // Navbar
     'nav.startProject': 'Start Project',
     'nav.openMenu': 'Open menu',
@@ -262,7 +271,7 @@ const strings = {
     // Services
     'services.eyebrow': 'Services',
     'services.title': 'All Your Visual Needs, One Direction',
-    'services.desc': 'From daily design to websites and animation — pick what you need, we handle the rest.',
+    'services.desc': 'From daily design to websites and animation, pick what you need, we handle the rest.',
     'services.items': [
       { icon: 'palette', title: 'Graphic Design', desc: 'Posters, banners, feeds, and daily visuals that are clean and consistent.' },
       { icon: 'badge', title: 'Branding & Logo', desc: 'Complete visual identity: logo, colors, and guidelines ready to use.' },
@@ -310,7 +319,7 @@ const strings = {
     // Why AKV
     'why.eyebrow': 'Why AKV',
     'why.title': 'Not Just Done, But Directed',
-    'why.desc': 'Four things we uphold in every project — no matter the scale.',
+    'why.desc': 'Four things we uphold in every project, no matter the scale.',
     'why.benefits': [
       { icon: 'compass', title: 'Visual Strategy', desc: 'Every piece starts with a clear direction, not just looks.' },
       { icon: 'gem', title: 'Quality Design', desc: 'Details polished, hierarchy maintained, final result on-brand.' },
@@ -325,7 +334,7 @@ const strings = {
 
     // CTA
     'cta.title': 'Have an Idea to Visualize?',
-    'cta.desc': 'Tell us what you need — start a project with AKV.',
+    'cta.desc': 'Tell us what you need, start a project with AKV.',
     'cta.btn1': 'Start Project',
     'cta.btn2': 'Contact AKV',
     'cta.pegiAlt': 'Pegi holding a megaphone, inviting you to start a project with AKV',
@@ -347,7 +356,7 @@ const strings = {
     'error.reload': 'Reload',
     'error.home': 'Go Home',
 
-    'notFound.pageTitle': '404 — Page Not Found | AKV',
+    'notFound.pageTitle': '404 - Page Not Found | AKV',
     'notFound.eyebrow': 'Error 404',
     'notFound.title1': 'Oops, this page ',
     'notFound.title2': 'doesn\'t exist.',

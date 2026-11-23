@@ -180,13 +180,13 @@ export const testimonials = [
 
 export const teamMembers = [
   {
-    name: 'Lia Nur Khasanah',
-    role: 'Founder · Creative Director',
-    url: 'https://lianurkhasanah.my.id',
+    name: 'Zakaria Mujur Prasetyo',
+    role: 'Owner & Founder · Visual Designer',
+    url: 'https://zakariamp.id',
   },
   {
-    name: 'Zakaria Mujur Prasetyo',
-    role: 'Co-Founder · Visual Designer',
-    url: 'https://zdekktech.biz.id/about',
+    name: 'Lia Nur Khasanah',
+    role: 'Co-Founder · Creative Director',
+    url: 'https://lianurkhasanah.my.id',
   },
 ]

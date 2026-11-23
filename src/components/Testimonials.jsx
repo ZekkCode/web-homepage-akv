@@ -8,7 +8,7 @@ export default function Testimonials() {
   const { testimonials } = useContent()
   const locale = useLocale()
   return (
-    <section className="relative overflow-hidden bg-akv-pale py-14 sm:py-20 md:py-28" aria-labelledby="testimoni-heading">
+    <section id="testimoni" className="relative overflow-hidden bg-akv-pale py-14 sm:py-20 md:py-28" aria-labelledby="testimoni-heading">
       <EdgeAsset src="/assets/deco-nib-swash.webp" side="right" top="14%" width={150} speed={46} rotate={4} />
       <div className="container-akv relative z-10">
         <SectionHeading
