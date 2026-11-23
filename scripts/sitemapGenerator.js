@@ -41,20 +41,19 @@ export function generateSitemapIndex(baseUrl = 'https://akv.zakariamp.id') {
 }
 
 /**
- * Sitemap halaman kanonik (tanpa #fragment) dengan dukungan hreflang id-ID, en-US, x-default.
+ * Sitemap halaman kanonik (tanpa #fragment) dengan dukungan hreflang en-US, x-default.
  */
 export function generateMainSitemap(baseUrl = 'https://akv.zakariamp.id') {
   const cleanBase = (baseUrl || 'https://akv.zakariamp.id').replace(/\/$/, '')
   const lastmod = getLastModISO()
 
-  const alternates = `    <xhtml:link rel="alternate" hreflang="id-ID" href="${xmlEscape(`${cleanBase}/?lang=id`)}"/>
-    <xhtml:link rel="alternate" hreflang="en-US" href="${xmlEscape(`${cleanBase}/?lang=en`)}"/>
+  const alternates = `    <xhtml:link rel="alternate" hreflang="id-ID" href="${xmlEscape(`${cleanBase}/`)}"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="${xmlEscape(`${cleanBase}/?locale=en`)}"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="${xmlEscape(`${cleanBase}/`)}"/>`
 
   const urls = [
     { loc: `${cleanBase}/`, priority: '1.0', changefreq: 'weekly', withAlternates: true },
-    { loc: `${cleanBase}/?lang=id`, priority: '0.9', changefreq: 'weekly', withAlternates: true },
-    { loc: `${cleanBase}/?lang=en`, priority: '0.9', changefreq: 'weekly', withAlternates: true },
+    { loc: `${cleanBase}/?locale=en`, priority: '0.9', changefreq: 'weekly', withAlternates: true },
     { loc: `${cleanBase}/syarat-ketentuan`, priority: '0.5', changefreq: 'monthly', withAlternates: false },
     { loc: `${cleanBase}/privasi`, priority: '0.5', changefreq: 'monthly', withAlternates: false },
   ]

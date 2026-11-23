@@ -27,7 +27,7 @@ export default function Landing() {
   usePageSeo({
     title: t(locale, 'seo.title'),
     description: t(locale, 'seo.description'),
-    canonical: locale === 'en' ? `${siteUrl}/?lang=en` : `${siteUrl}/`,
+    canonical: locale === 'en' ? `${siteUrl}/?locale=en` : `${siteUrl}/`,
     locale,
   })
 

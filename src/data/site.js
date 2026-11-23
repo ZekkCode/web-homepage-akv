@@ -8,10 +8,10 @@
  */
 
 export const contact = {
-  whatsapp: '62881081772005',
-  instagram: 'https://instagram.com/akuvisual.id',
-  tiktok: 'https://tiktok.com/@akuvisual.id',
-  email: 'halo@akv.zakariamp.id',
+  whatsapp: '0881081772005',
+  instagram: 'https://instagram.com/aku.visual',
+  tiktok: 'https://tiktok.com/@aku.visual',
+  email: 'zakariamujur6@gmail.com',
 }
 
 export const navLinks = [
@@ -337,7 +337,7 @@ export const faqs = [
 export const teamMembers = [
   {
     name: 'Zakaria Mujur Prasetyo',
-    role: 'Owner & Founder · Visual Designer',
+    role: 'Owner · Visual Designer',
     url: 'https://zakariamp.id',
   },
   {

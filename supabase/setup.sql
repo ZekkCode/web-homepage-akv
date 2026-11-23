@@ -168,7 +168,7 @@ create policy "Admin delete faqs" on public.faqs for delete to authenticated usi
 -- ====================================================================
 
 insert into public.contact (id, whatsapp, instagram, tiktok, email) values
-  (1, '62881081772005', 'https://instagram.com/akuvisual.id', 'https://tiktok.com/@akuvisual.id', 'halo@akv.zakariamp.id')
+  (1, '0881081772005', 'https://instagram.com/aku.visual', 'https://tiktok.com/@aku.visual', 'zakariamujur6@gmail.com')
 on conflict (id) do nothing;
 
 insert into public.services (id, icon, title, "desc", price, duration) values
@@ -252,6 +252,6 @@ insert into public.faqs (id, question, answer) values
 on conflict (id) do nothing;
 
 insert into public.team_members (id, name, role, url) values
-  (1, 'Zakaria Mujur Prasetyo', 'Owner & Founder · Visual Designer', 'https://zakariamp.id'),
-  (2, 'Lia Nur Khasanah',       'Co-Founder · Creative Director',    'https://lianurkhasanah.my.id')
+  (1, 'Zakaria Mujur Prasetyo', 'Owner · Visual Designer', 'https://zakariamp.id'),
+  (2, 'Lia Nur Khasanah',       'Co-Founder · Creative Director', 'https://lianurkhasanah.my.id')
 on conflict (id) do nothing;

@@ -39,12 +39,12 @@ export function subscribe(fn) {
   return () => listeners.delete(fn)
 }
 
-/** Switch locale tanpa reload (?lang=en, sinkron dengan hreflang & sitemap). */
+/** Switch locale tanpa reload (?locale=en, sinkron dengan hreflang & sitemap). */
 export function setLocale(loc) {
   const url = new URL(window.location.href)
-  url.searchParams.delete('locale')
-  if (loc === 'id') url.searchParams.delete('lang')
-  else url.searchParams.set('lang', loc)
+  url.searchParams.delete('lang')
+  if (loc === 'id') url.searchParams.delete('locale')
+  else url.searchParams.set('locale', loc)
   window.history.pushState({}, '', url.toString())
   currentLocale = loc
   emit()
