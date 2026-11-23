@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import SectionHeading from './ui/SectionHeading.jsx'
 import Icon from './ui/Icon.jsx'
@@ -13,19 +13,35 @@ export default function Portfolio() {
   const reduce = useReducedMotion()
 
   const filters = t(locale, 'portfolio.filters')
-  const filterAll = filters[0] // 'Semua' or 'All'
+  const filterAll = filters[0]
   const [active, setActive] = useState(filterAll)
+  const [selectedItem, setSelectedItem] = useState(null)
 
-  // Merge admin data (image, tone) with i18n labels
+  useEffect(() => {
+    setActive(filterAll)
+  }, [filterAll])
+
+  useEffect(() => {
+    if (!selectedItem) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') setSelectedItem(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [selectedItem])
+
+  // Merge admin data (image, tone, description) with i18n labels for EN
   const i18nItems = t(locale, 'portfolio.items')
   const portfolioItems = adminItems.map((adminItem, idx) => ({
     ...adminItem,
-    title: i18nItems[idx]?.title ?? adminItem.title,
-    category: i18nItems[idx]?.category ?? adminItem.category,
+    title: locale === 'en' ? (i18nItems[idx]?.title ?? adminItem.title) : adminItem.title,
+    category: locale === 'en' ? (i18nItems[idx]?.category ?? adminItem.category) : adminItem.category,
+    description:
+      locale === 'en'
+        ? (i18nItems[idx]?.description ?? adminItem.description ?? '')
+        : (adminItem.description ?? ''),
   }))
 
-  // Build category map: i18n filter label → list of i18n categories
-  // filters[0] = All, filters[1..n] map to unique categories in order
   const items =
     active === filterAll
       ? portfolioItems
@@ -37,7 +53,7 @@ export default function Portfolio() {
   const waMsgPrefix = t(locale, 'portfolio.waMsg')
 
   return (
-    <section id="portofolio" className="relative overflow-hidden bg-white py-14 sm:py-20 md:py-28" aria-labelledby="portofolio-heading">
+    <section id="portofolio" className="relative overflow-hidden bg-akv-pale/60 py-14 sm:py-20 md:py-28" aria-labelledby="portofolio-heading">
       <EdgeAsset src="/assets/deco-tool-flyout.webp" side="left" top="8%" width={225} speed={52} rotate={-2} />
       <EdgeAsset src="/assets/deco-tape.webp" side="right" bottom="12%" width={250} speed={44} rotate={0} />
       <div className="container-akv relative z-10">
@@ -59,6 +75,7 @@ export default function Portfolio() {
             return (
               <button
                 key={filter}
+                type="button"
                 role="tab"
                 aria-selected={selected}
                 onClick={() => setActive(filter)}
@@ -74,7 +91,7 @@ export default function Portfolio() {
           })}
         </div>
 
-        {/* Mobile: Infinite Bi-Directional Horizontal Carousel (Left & Right Swipe from State 0) */}
+        {/* Mobile: Infinite Bi-Directional Horizontal Carousel */}
         <ul
           ref={scrollRef}
           data-lenis-prevent
@@ -88,41 +105,42 @@ export default function Portfolio() {
               transition={{ duration: 0.35, ease: [0.22, 0.65, 0.3, 1] }}
               className="group relative overflow-hidden rounded-xl border border-akv-navy/10 bg-white shadow-card w-[220px] shrink-0 snap-start"
             >
-              {item.image ? (
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover"
-                />
-              ) : (
-                <div
-                  className={`flex aspect-[4/3] w-full flex-col items-center justify-center gap-1.5 bg-gradient-to-br ${item.tone} text-white/80 p-2 text-center`}
-                >
-                  <Icon name="image" size={20} />
-                  <span className="rounded-full bg-white/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider">
-                    Placeholder
+              <button
+                type="button"
+                onClick={() => setSelectedItem(item)}
+                className="block w-full text-left"
+                aria-label={`${t(locale, 'portfolio.viewDetailAria')} ${item.title}`}
+              >
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className={`flex aspect-[4/3] w-full flex-col items-center justify-center gap-1.5 bg-gradient-to-br ${item.tone} text-white/80 p-2 text-center`}
+                  >
+                    <Icon name="image" size={20} />
+                    <span className="rounded-full bg-white/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider">
+                      Placeholder
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between px-3 py-2.5">
+                  <div className="min-w-0 pr-1">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-akv-blue">
+                      {item.category}
+                    </p>
+                    <h3 className="text-sm font-extrabold text-akv-navy truncate">{item.title}</h3>
+                  </div>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-akv-light text-akv-blue shrink-0">
+                    <Icon name="eye" size={14} />
                   </span>
                 </div>
-              )}
-
-              <div className="flex items-center justify-between px-3 py-2.5">
-                <div className="min-w-0 pr-1">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-akv-blue">
-                    {item.category}
-                  </p>
-                  <h3 className="text-sm font-extrabold text-akv-navy truncate">{item.title}</h3>
-                </div>
-                <a
-                  href={waLink(`${waMsgPrefix} "${item.title}".`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${t(locale, 'portfolio.viewDetailAria')} ${item.title}`}
-                  className="flex h-7 w-7 items-center justify-center rounded-full bg-akv-light text-akv-blue shrink-0"
-                >
-                  <Icon name="arrowRight" size={14} />
-                </a>
-              </div>
+              </button>
             </motion.li>
           ))}
         </ul>
@@ -145,7 +163,7 @@ export default function Portfolio() {
                     src={item.image}
                     alt={item.title}
                     loading="lazy"
-                    className="aspect-[4/3] w-full object-cover"
+                    className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   />
                 ) : (
                   <div
@@ -158,26 +176,113 @@ export default function Portfolio() {
                   </div>
                 )}
 
-                <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-akv-navy/85 via-akv-navy/30 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+                <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-akv-navy/90 via-akv-navy/35 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
                   <p className="text-[11px] font-bold uppercase tracking-widest text-akv-sky">
                     {item.category}
                   </p>
                   <h3 className="mt-1 text-lg font-extrabold text-white">{item.title}</h3>
-                  <a
-                    href={waLink(`${waMsgPrefix} "${item.title}".`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => setSelectedItem(item)}
                     className="pointer-events-auto mt-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-extrabold text-akv-navy transition-colors hover:bg-akv-light"
                   >
                     {t(locale, 'portfolio.viewDetail')}
-                    <Icon name="arrowRight" size={14} />
-                  </a>
+                    <Icon name="eye" size={14} />
+                  </button>
                 </div>
               </motion.li>
             ))}
           </AnimatePresence>
         </motion.ul>
       </div>
+
+      {/* Modal Detail Portofolio */}
+      <AnimatePresence>
+        {selectedItem && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="portfolio-modal-title"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setSelectedItem(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-akv-navy/70 p-4 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={reduce ? false : { opacity: 0, scale: 0.94, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 12 }}
+              transition={{ duration: 0.22, ease: [0.22, 0.65, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-xl overflow-hidden rounded-feature border-2 border-akv-navy/15 bg-white shadow-panel"
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedItem(null)}
+                aria-label={t(locale, 'portfolio.modalClose')}
+                className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-akv-navy shadow-card transition-colors hover:bg-akv-blue hover:text-white"
+              >
+                <Icon name="close" size={18} />
+              </button>
+
+              {selectedItem.image ? (
+                <img
+                  src={selectedItem.image}
+                  alt={selectedItem.title}
+                  className="aspect-[4/3] w-full bg-akv-pale object-cover"
+                />
+              ) : (
+                <div
+                  className={`flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 bg-gradient-to-br ${selectedItem.tone} px-6 text-center text-white/85`}
+                >
+                  <Icon name="image" size={32} />
+                  <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+                    Placeholder
+                  </span>
+                  <p className="max-w-sm text-xs text-white/80">
+                    {t(locale, 'portfolio.modalPlaceholderNote')}
+                  </p>
+                </div>
+              )}
+
+              <div className="p-5 sm:p-6">
+                <p className="text-[11px] font-extrabold uppercase tracking-widest text-akv-blue">
+                  {selectedItem.category}
+                </p>
+                <h3 id="portfolio-modal-title" className="mt-1 text-xl font-extrabold text-akv-navy">
+                  {selectedItem.title}
+                </h3>
+                {selectedItem.description && (
+                  <p className="mt-2 text-sm leading-relaxed text-akv-navy/70">
+                    {selectedItem.description}
+                  </p>
+                )}
+
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <a
+                    href={waLink(`${waMsgPrefix} "${selectedItem.title}" (${selectedItem.category}). Boleh lihat detail dan estimasinya?`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary !py-2.5 !text-sm"
+                  >
+                    <Icon name="whatsapp" size={16} />
+                    {t(locale, 'portfolio.modalOrder')}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedItem(null)}
+                    className="btn-secondary !py-2.5 !text-sm"
+                  >
+                    {t(locale, 'portfolio.modalClose')}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

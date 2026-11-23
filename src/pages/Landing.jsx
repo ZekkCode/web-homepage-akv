@@ -8,12 +8,15 @@ import LogoSequence from '../components/LogoSequence.jsx'
 import About from '../components/About.jsx'
 import Services from '../components/Services.jsx'
 import TapeDivider from '../components/ui/TapeDivider.jsx'
+import Pricing from '../components/Pricing.jsx'
 import Portfolio from '../components/Portfolio.jsx'
 import Process from '../components/Process.jsx'
 import WhyAkv from '../components/WhyAkv.jsx'
 import Testimonials from '../components/Testimonials.jsx'
+import Faq from '../components/Faq.jsx'
 import CtaSection from '../components/CtaSection.jsx'
 import Footer from '../components/Footer.jsx'
+import FloatingWa from '../components/FloatingWa.jsx'
 
 export default function Landing() {
   // Lenis smooth scroll + GSAP ScrollTrigger sync (khusus landing)
@@ -28,7 +31,7 @@ export default function Landing() {
     locale,
   })
 
-  // Navbar muncul saat logo intro merapat ke atas (fase 2)
+  // Navbar muncul saat logo intro merapat ke atas (fase 2) atau langsung jika intro sudah pernah dilihat
   const [navVisible, setNavVisible] = useState(false)
 
   const handleHeroPhase = useCallback((phase) => {
@@ -50,13 +53,16 @@ export default function Landing() {
         <About />
         <Services />
         <TapeDivider />
+        <Pricing />
         <Portfolio />
         <Process />
         <WhyAkv />
         <Testimonials />
+        <Faq />
         <CtaSection />
       </main>
       <Footer />
+      <FloatingWa />
     </>
   )
 }

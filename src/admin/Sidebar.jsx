@@ -4,8 +4,10 @@ import Icon from '../components/ui/Icon.jsx'
 const TABS = [
   { id: 'kontak', label: 'Kontak', icon: 'whatsapp' },
   { id: 'layanan', label: 'Layanan', icon: 'palette' },
+  { id: 'paket', label: 'Paket', icon: 'tag' },
   { id: 'portofolio', label: 'Portofolio', icon: 'image' },
   { id: 'testimoni', label: 'Testimoni', icon: 'chat' },
+  { id: 'faq', label: 'FAQ', icon: 'helpCircle' },
   { id: 'tim', label: 'Tim', icon: 'badge' },
 ]
 

@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { isAuthed, logout } from '../admin/auth.js'
 import { usePageSeo } from '../utils/seo.js'
+import { uploadImageToR2, deleteImageFromR2 } from '../utils/r2Upload.js'
+import { formatBytes } from '../utils/imageWebp.js'
 import LoginForm from '../admin/LoginForm.jsx'
 import Sidebar from '../admin/Sidebar.jsx'
 import Icon from '../components/ui/Icon.jsx'
@@ -65,8 +67,10 @@ function Dashboard({ onLogout }) {
       <main className="flex-1 px-4 py-6 sm:px-6 lg:overflow-y-auto lg:px-10 lg:py-8">
         {tab === 'kontak' && <ContactPanel key="kontak" />}
         {tab === 'layanan' && <ServicesPanel key="layanan" />}
+        {tab === 'paket' && <PricingPanel key="paket" />}
         {tab === 'portofolio' && <PortfolioPanel key="portofolio" />}
         {tab === 'testimoni' && <TestimonialsPanel key="testimoni" />}
+        {tab === 'faq' && <FaqPanel key="faq" />}
         {tab === 'tim' && <TeamPanel key="tim" />}
 
         <div className="mt-10 border-t border-akv-navy/10 pt-5">
@@ -88,7 +92,7 @@ function Dashboard({ onLogout }) {
 
 /* ---------- kerangka panel ---------- */
 
-function PanelShell({ title, hint, onSave, saved, children }) {
+function PanelShell({ title, hint, onSave, saved, warning, children }) {
   return (
     <section aria-label={title}>
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
@@ -102,26 +106,37 @@ function PanelShell({ title, hint, onSave, saved, children }) {
               Tersimpan
             </span>
           )}
-          <button onClick={onSave} className="btn-primary !px-5 !py-2 !text-sm">
+          <button type="button" onClick={onSave} className="btn-primary !px-5 !py-2 !text-sm">
             Simpan
           </button>
         </div>
       </div>
+      {warning && (
+        <p role="status" className="mb-4 rounded-xl border border-akv-blue/25 bg-akv-light/70 px-4 py-2.5 text-xs font-semibold text-akv-navy">
+          {warning}
+        </p>
+      )}
       {children}
     </section>
   )
 }
 
-function useSavedFlash() {
+function useSaveState() {
   const [saved, setSaved] = useState(false)
+  const [warning, setWarning] = useState('')
   const timerRef = useRef(null)
-  const flash = () => {
+
+  const handleSave = async (partial) => {
+    setWarning('')
+    const res = await saveContent(partial)
+    if (res?.warning) setWarning(res.warning)
     setSaved(true)
     clearTimeout(timerRef.current)
-    timerRef.current = setTimeout(() => setSaved(false), 2200)
+    timerRef.current = setTimeout(() => setSaved(false), 2400)
   }
+
   useEffect(() => () => clearTimeout(timerRef.current), [])
-  return [saved, flash]
+  return { saved, warning, handleSave }
 }
 
 const inputCls =
@@ -143,18 +158,16 @@ function Field({ label, children }) {
 function ContactPanel() {
   const { contact } = useContent()
   const [draft, setDraft] = useState({ ...contact })
-  const [saved, flash] = useSavedFlash()
+  const { saved, warning, handleSave } = useSaveState()
   const set = (k) => (e) => setDraft({ ...draft, [k]: e.target.value })
 
   return (
     <PanelShell
       title="Kontak & Sosial"
-      hint="Nomor WhatsApp format internasional tanpa tanda plus, contoh 62812xxxxxxx."
+      hint="Nomor WhatsApp format internasional tanpa tanda plus, contoh 62881081772005."
       saved={saved}
-      onSave={() => {
-        saveContent({ contact: draft })
-        flash()
-      }}
+      warning={warning}
+      onSave={() => handleSave({ contact: draft })}
     >
       <div className="grid max-w-2xl gap-4 rounded-feature border-2 border-akv-navy/10 bg-white p-5 shadow-card sm:grid-cols-2">
         <Field label="WhatsApp">
@@ -189,6 +202,7 @@ function CrudList({ items, setItems, renderFields, addLabel, makeNew }) {
               Item {i + 1}
             </span>
             <button
+              type="button"
               onClick={() => setItems(items.filter((_, j) => j !== i))}
               className="text-xs font-bold text-akv-navy/45 transition-colors hover:text-akv-navy hover:underline"
             >
@@ -201,6 +215,7 @@ function CrudList({ items, setItems, renderFields, addLabel, makeNew }) {
         </div>
       ))}
       <button
+        type="button"
         onClick={() => setItems([...items, makeNew()])}
         className="rounded-feature border-2 border-dashed border-akv-navy/20 bg-white/60 px-5 py-4 text-sm font-bold text-akv-navy/60 transition-colors hover:border-akv-blue hover:text-akv-blue"
       >
@@ -215,27 +230,43 @@ function CrudList({ items, setItems, renderFields, addLabel, makeNew }) {
 function ServicesPanel() {
   const { services } = useContent()
   const [items, setItems] = useState(services.map((s) => ({ ...s })))
-  const [saved, flash] = useSavedFlash()
+  const { saved, warning, handleSave } = useSaveState()
 
   return (
     <PanelShell
       title="Layanan"
-      hint="Kartu layanan di section Layanan dan link di footer."
+      hint="Kartu layanan di section Layanan lengkap dengan estimasi harga, durasi, dan tombol pesan langsung."
       saved={saved}
-      onSave={() => {
-        saveContent({ services: items })
-        flash()
-      }}
+      warning={warning}
+      onSave={() => handleSave({ services: items })}
     >
       <CrudList
         items={items}
         setItems={setItems}
         addLabel="Tambah layanan"
-        makeNew={() => ({ icon: 'sparkles', title: '', desc: '' })}
+        makeNew={() => ({ icon: 'sparkles', title: '', desc: '', price: '', duration: '' })}
         renderFields={(item, patch) => (
-          <div className="grid gap-3 sm:grid-cols-[1fr_150px]">
-            <Field label="Nama layanan">
-              <input className={inputCls} value={item.title} onChange={(e) => patch({ title: e.target.value })} />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="sm:col-span-2">
+              <Field label="Nama layanan">
+                <input className={inputCls} value={item.title} onChange={(e) => patch({ title: e.target.value })} />
+              </Field>
+            </div>
+            <Field label="Estimasi harga">
+              <input
+                className={inputCls}
+                value={item.price || ''}
+                placeholder="Mulai Rp 50rb"
+                onChange={(e) => patch({ price: e.target.value })}
+              />
+            </Field>
+            <Field label="Estimasi waktu">
+              <input
+                className={inputCls}
+                value={item.duration || ''}
+                placeholder="1-3 hari"
+                onChange={(e) => patch({ duration: e.target.value })}
+              />
             </Field>
             <Field label="Ikon">
               <select
@@ -248,7 +279,7 @@ function ServicesPanel() {
                 ))}
               </select>
             </Field>
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-2 lg:col-span-3">
               <Field label="Deskripsi singkat">
                 <textarea
                   rows={2}
@@ -265,30 +296,264 @@ function ServicesPanel() {
   )
 }
 
+/* ---------- panel paket harga ---------- */
+
+function PricingPanel() {
+  const { pricingPackages } = useContent()
+  const [items, setItems] = useState(
+    pricingPackages.map((p) => ({
+      ...p,
+      featuresText: Array.isArray(p.features) ? p.features.join('\n') : '',
+    }))
+  )
+  const { saved, warning, handleSave } = useSaveState()
+
+  return (
+    <PanelShell
+      title="Paket & Harga"
+      hint="Tampil di section Paket & Harga. Tulis daftar fitur 1 poin per baris."
+      saved={saved}
+      warning={warning}
+      onSave={() =>
+        handleSave({
+          pricingPackages: items.map(({ featuresText, ...rest }) => ({
+            ...rest,
+            features: featuresText
+              .split('\n')
+              .map((line) => line.trim())
+              .filter(Boolean),
+          })),
+        })
+      }
+    >
+      <CrudList
+        items={items}
+        setItems={setItems}
+        addLabel="Tambah paket"
+        makeNew={() => ({
+          name: '',
+          badge: '',
+          price: 'Mulai Rp ',
+          unit: 'per proyek',
+          desc: '',
+          featured: false,
+          ctaLabel: 'Pilih Paket',
+          featuresText: '',
+        })}
+        renderFields={(item, patch) => (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Field label="Nama paket">
+              <input className={inputCls} value={item.name} onChange={(e) => patch({ name: e.target.value })} />
+            </Field>
+            <Field label="Label / Badge">
+              <input
+                className={inputCls}
+                value={item.badge}
+                placeholder="Paling Diminati"
+                onChange={(e) => patch({ badge: e.target.value })}
+              />
+            </Field>
+            <Field label="Harga">
+              <input
+                className={inputCls}
+                value={item.price}
+                placeholder="Mulai Rp 250rb"
+                onChange={(e) => patch({ price: e.target.value })}
+              />
+            </Field>
+            <Field label="Satuan">
+              <input
+                className={inputCls}
+                value={item.unit}
+                placeholder="per paket"
+                onChange={(e) => patch({ unit: e.target.value })}
+              />
+            </Field>
+            <Field label="Teks tombol CTA">
+              <input
+                className={inputCls}
+                value={item.ctaLabel}
+                placeholder="Pilih Paket"
+                onChange={(e) => patch({ ctaLabel: e.target.value })}
+              />
+            </Field>
+            <label className="flex items-center gap-2.5 self-end rounded-xl border-2 border-akv-navy/10 bg-akv-pale/60 px-3.5 py-2.5 text-xs font-bold text-akv-navy">
+              <input
+                type="checkbox"
+                checked={Boolean(item.featured)}
+                onChange={(e) => patch({ featured: e.target.checked })}
+                className="h-4 w-4 accent-akv-blue"
+              />
+              Sorot sebagai paket utama (Populer)
+            </label>
+            <div className="sm:col-span-2 lg:col-span-3">
+              <Field label="Deskripsi singkat">
+                <input className={inputCls} value={item.desc} onChange={(e) => patch({ desc: e.target.value })} />
+              </Field>
+            </div>
+            <div className="sm:col-span-2 lg:col-span-3">
+              <Field label="Daftar fitur (1 poin per baris)">
+                <textarea
+                  rows={4}
+                  className={inputCls}
+                  value={item.featuresText}
+                  onChange={(e) => patch({ featuresText: e.target.value })}
+                />
+              </Field>
+            </div>
+          </div>
+        )}
+      />
+    </PanelShell>
+  )
+}
+
+/* ---------- uploader Cloudflare R2 + kompres WebP ---------- */
+
+function R2ImageField({ value, onChange }) {
+  const inputRef = useRef(null)
+  const [busy, setBusy] = useState(false)
+  const [status, setStatus] = useState('')
+  const [error, setError] = useState('')
+  const [stats, setStats] = useState(null)
+
+  const handleFile = async (file) => {
+    if (!file) return
+    setError('')
+    setStats(null)
+    setBusy(true)
+    const previousUrl = value
+    try {
+      const result = await uploadImageToR2(file, {
+        folder: 'portfolio',
+        onStatus: (msg) => setStatus(msg),
+      })
+      onChange(result.url)
+      setStats(result.stats)
+      setStatus('Berhasil diunggah ke Cloudflare R2 (WebP). Klik Simpan untuk menyimpan ke database.')
+      if (previousUrl && previousUrl !== result.url) {
+        deleteImageFromR2(previousUrl)
+      }
+    } catch (err) {
+      setError(err?.message || 'Gagal mengunggah gambar ke Cloudflare R2.')
+      setStatus('')
+    } finally {
+      setBusy(false)
+      if (inputRef.current) inputRef.current.value = ''
+    }
+  }
+
+  const handleClear = () => {
+    if (value) deleteImageFromR2(value)
+    onChange('')
+    setStats(null)
+    setStatus('')
+    setError('')
+  }
+
+  return (
+    <div className="space-y-3 rounded-xl border-2 border-akv-navy/10 bg-akv-pale/50 p-3.5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        {value ? (
+          <img
+            src={value}
+            alt="Pratinjau portofolio"
+            className="h-24 w-32 shrink-0 rounded-lg border border-akv-navy/10 bg-white object-cover"
+          />
+        ) : (
+          <div className="flex h-24 w-32 shrink-0 flex-col items-center justify-center rounded-lg border-2 border-dashed border-akv-navy/15 bg-white text-akv-navy/35">
+            <Icon name="image" size={20} />
+            <span className="mt-1 text-[10px] font-bold uppercase">Kosong</span>
+          </div>
+        )}
+
+        <div className="min-w-0 flex-1 space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              onChange={(e) => handleFile(e.target.files?.[0])}
+              className="hidden"
+            />
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => inputRef.current?.click()}
+              className="inline-flex items-center gap-1.5 rounded-full bg-akv-blue px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-akv-blue-dark disabled:opacity-60"
+            >
+              <Icon name="upload" size={14} />
+              {busy ? 'Memproses…' : 'Upload & Kompres WebP ke R2'}
+            </button>
+            {value && (
+              <button
+                type="button"
+                disabled={busy}
+                onClick={handleClear}
+                className="inline-flex items-center gap-1 rounded-full border border-akv-navy/15 bg-white px-3 py-2 text-xs font-bold text-akv-navy/70 transition-colors hover:border-akv-navy hover:text-akv-navy disabled:opacity-60"
+              >
+                <Icon name="trash" size={13} />
+                Hapus gambar
+              </button>
+            )}
+          </div>
+          <p className="text-[11px] leading-snug text-akv-navy/55">
+            PNG/JPG/WebP otomatis di-resize (maks 1400px), dikompres target ≤ 250 KB, dan dikonversi ke WebP sebelum diunggah ke Cloudflare R2.
+          </p>
+        </div>
+      </div>
+
+      {status && (
+        <p className="text-xs font-bold text-akv-blue">{status}</p>
+      )}
+      {stats && (
+        <p className="text-[11px] font-semibold text-akv-navy/70">
+          Ukuran: {formatBytes(stats.originalSize)} → {formatBytes(stats.compressedSize)} (hemat {stats.savingsPercent}%) · {stats.width}×{stats.height}px WebP
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="text-xs font-bold text-akv-royal">
+          {error}
+        </p>
+      )}
+
+      <Field label="URL gambar (terisi otomatis dari R2 atau tempel manual)">
+        <input
+          className={inputCls}
+          value={value ?? ''}
+          placeholder="https://cdn.akv.zakariamp.id/portfolio/..."
+          onChange={(e) => onChange(e.target.value)}
+        />
+      </Field>
+    </div>
+  )
+}
+
 /* ---------- panel portofolio ---------- */
 
 function PortfolioPanel() {
   const { portfolioItems } = useContent()
   const [items, setItems] = useState(portfolioItems.map((p) => ({ ...p })))
-  const [saved, flash] = useSavedFlash()
+  const { saved, warning, handleSave } = useSaveState()
   const categories = portfolioFilters.filter((f) => f !== 'Semua')
 
   return (
     <PanelShell
       title="Portofolio"
-      hint="Kosongkan URL gambar untuk memakai placeholder. Letakkan file di public/assets/portfolio/ lalu isi, contoh: /assets/portfolio/nama.webp"
+      hint="Upload gambar langsung ke Cloudflare R2 (otomatis kompres & ubah ke WebP), lalu klik Simpan."
       saved={saved}
-      onSave={() => {
-        saveContent({
+      warning={warning}
+      onSave={() =>
+        handleSave({
           portfolioItems: items.map((it, i) => ({
             tone: 'from-akv-blue to-akv-royal',
             ...it,
             id: i + 1,
             image: it.image?.trim() ? it.image.trim() : null,
+            description: it.description?.trim() || '',
           })),
         })
-        flash()
-      }}
+      }
     >
       <CrudList
         items={items}
@@ -298,6 +563,7 @@ function PortfolioPanel() {
           title: '',
           category: categories[0],
           image: '',
+          description: '',
           tone: 'from-akv-blue to-akv-royal',
         })}
         renderFields={(item, patch) => (
@@ -317,14 +583,21 @@ function PortfolioPanel() {
               </select>
             </Field>
             <div className="sm:col-span-2">
-              <Field label="URL gambar (opsional, WebP disarankan)">
-                <input
+              <Field label="Deskripsi singkat (tampil di modal detail)">
+                <textarea
+                  rows={2}
                   className={inputCls}
-                  value={item.image ?? ''}
-                  placeholder="/assets/portfolio/nama-project.webp"
-                  onChange={(e) => patch({ image: e.target.value })}
+                  value={item.description || ''}
+                  placeholder="Ringkasan hasil dan konsep desain yang dikerjakan..."
+                  onChange={(e) => patch({ description: e.target.value })}
                 />
               </Field>
+            </div>
+            <div className="sm:col-span-2">
+              <R2ImageField
+                value={item.image || ''}
+                onChange={(url) => patch({ image: url })}
+              />
             </div>
           </div>
         )}
@@ -338,17 +611,15 @@ function PortfolioPanel() {
 function TestimonialsPanel() {
   const { testimonials } = useContent()
   const [items, setItems] = useState(testimonials.map((t) => ({ ...t })))
-  const [saved, flash] = useSavedFlash()
+  const { saved, warning, handleSave } = useSaveState()
 
   return (
     <PanelShell
       title="Testimoni"
       hint="Singkat nama klien demi privasi, contoh: Naj***"
       saved={saved}
-      onSave={() => {
-        saveContent({ testimonials: items })
-        flash()
-      }}
+      warning={warning}
+      onSave={() => handleSave({ testimonials: items })}
     >
       <CrudList
         items={items}
@@ -380,22 +651,64 @@ function TestimonialsPanel() {
   )
 }
 
+/* ---------- panel FAQ ---------- */
+
+function FaqPanel() {
+  const { faqs } = useContent()
+  const [items, setItems] = useState(faqs.map((f) => ({ ...f })))
+  const { saved, warning, handleSave } = useSaveState()
+
+  return (
+    <PanelShell
+      title="FAQ Pembelian"
+      hint="Tampil di section FAQ untuk menjawab keraguan calon pembeli sebelum pesan."
+      saved={saved}
+      warning={warning}
+      onSave={() => handleSave({ faqs: items })}
+    >
+      <CrudList
+        items={items}
+        setItems={setItems}
+        addLabel="Tambah pertanyaan FAQ"
+        makeNew={() => ({ question: '', answer: '' })}
+        renderFields={(item, patch) => (
+          <div className="grid gap-3">
+            <Field label="Pertanyaan">
+              <input
+                className={inputCls}
+                value={item.question}
+                onChange={(e) => patch({ question: e.target.value })}
+              />
+            </Field>
+            <Field label="Jawaban">
+              <textarea
+                rows={3}
+                className={inputCls}
+                value={item.answer}
+                onChange={(e) => patch({ answer: e.target.value })}
+              />
+            </Field>
+          </div>
+        )}
+      />
+    </PanelShell>
+  )
+}
+
 /* ---------- panel tim ---------- */
 
 function TeamPanel() {
   const { teamMembers } = useContent()
   const [items, setItems] = useState(teamMembers.map((m) => ({ ...m })))
-  const [saved, flash] = useSavedFlash()
+  const { saved, warning, handleSave } = useSaveState()
 
   return (
     <PanelShell
       title="Tim"
       hint="Tampil di section Tentang Kami."
       saved={saved}
-      onSave={() => {
-        saveContent({ teamMembers: items })
-        flash()
-      }}
+      warning={warning}
+      onSave={() => handleSave({ teamMembers: items })}
     >
       <CrudList
         items={items}

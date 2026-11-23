@@ -20,15 +20,25 @@ import ScrollHint from './ui/ScrollHint.jsx'
  * 5 Pegi switches to presentation pose · 6 interface panels pop in
  * 7 done — hero fully interactive (mouse + scroll parallax)
  */
+const INTRO_SEEN_KEY = 'akv-intro-seen'
+
 const PHASE_TIMINGS = [
-  [1, 350],
-  [2, 1650],
-  [3, 2350],
-  [4, 3050],
-  [5, 4450],
-  [6, 5050],
-  [7, 5750],
+  [1, 80],
+  [2, 550],
+  [3, 800],
+  [4, 1050],
+  [5, 1300],
+  [6, 1450],
+  [7, 1850],
 ]
+
+function hasSeenIntro() {
+  try {
+    return typeof window !== 'undefined' && window.sessionStorage.getItem(INTRO_SEEN_KEY) === '1'
+  } catch {
+    return false
+  }
+}
 
 const easeOut = [0.22, 0.65, 0.3, 1]
 
@@ -37,24 +47,31 @@ export default function Hero({ onPhase }) {
   const locale = useLocale()
   const reduce = useReducedMotion()
   const isTouch = useIsTouch()
-  const [phase, setPhase] = useState(reduce ? 7 : 0)
+  const skipIntro = reduce || hasSeenIntro()
+  const [phase, setPhase] = useState(skipIntro ? 7 : 0)
   const sectionRef = useRef(null)
 
   // ----- intro sequence -----
-  // Starts only once the page is actually visible, so the animation is never
-  // "used up" while the site loads in a background tab.
+  // Cepat (~1.5s) dan hanya diputar sekali per sesi tab agar pengunjung langsung melihat penawaran & CTA.
   useEffect(() => {
-    if (reduce) {
+    if (skipIntro) {
       onPhase?.(7)
       return
     }
     let timers = []
     const start = () => {
-      timers = PHASE_TIMINGS.map(([p, t]) =>
+      timers = PHASE_TIMINGS.map(([p, ms]) =>
         setTimeout(() => {
           setPhase(p)
           onPhase?.(p)
-        }, t)
+          if (p >= 6) {
+            try {
+              window.sessionStorage.setItem(INTRO_SEEN_KEY, '1')
+            } catch {
+              /* ignore storage block */
+            }
+          }
+        }, ms)
       )
     }
     const onVisible = () => {
@@ -69,7 +86,7 @@ export default function Hero({ onPhase }) {
       document.removeEventListener('visibilitychange', onVisible)
       timers.forEach(clearTimeout)
     }
-  }, [reduce, onPhase])
+  }, [skipIntro, onPhase])
 
   // Preload the second Pegi pose so the crossfade never flashes
   useEffect(() => {
@@ -247,7 +264,7 @@ export default function Hero({ onPhase }) {
       {/* ===== Hero content grid ===== */}
       <motion.div
         style={{ opacity: contentOpacity }}
-        className="container-akv relative z-20 flex flex-1 flex-col justify-center pb-16 pt-24 md:pb-20 md:pt-28"
+        className="container-akv relative z-20 flex flex-1 flex-col justify-center pb-12 pt-20 md:pb-20 md:pt-28"
       >
         <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-4">
           {/* --- Layer 7 (left): headline + copy (+ CTA on desktop) --- */}
@@ -270,16 +287,20 @@ export default function Hero({ onPhase }) {
             <div className="mt-8 hidden flex-wrap gap-3 lg:flex lg:justify-start">
               <CtaButtons locale={locale} />
             </div>
+            <TrustBar locale={locale} className="mt-5 hidden lg:flex lg:justify-start" />
           </motion.div>
 
           {/* --- Mobile/tablet CTA — sits below Pegi --- */}
           <motion.div
-            className="order-3 flex flex-wrap justify-center gap-3 lg:hidden"
+            className="order-3 flex flex-col items-center gap-4 lg:hidden"
             initial={reduce ? false : { opacity: 0, y: 20 }}
             animate={contentVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
           >
-            <CtaButtons locale={locale} />
+            <div className="flex flex-wrap justify-center gap-3">
+              <CtaButtons locale={locale} />
+            </div>
+            <TrustBar locale={locale} className="justify-center" />
           </motion.div>
 
           {/* --- Center: Pegi + interface panels --- */}
@@ -287,7 +308,7 @@ export default function Hero({ onPhase }) {
             {/* Layer 4 — big design-canvas panel behind Pegi */}
             <motion.div
               aria-hidden="true"
-              className="absolute left-1/2 top-1/2 z-0 w-[108%] max-w-none"
+              className="absolute left-1/2 top-1/2 z-0 w-full max-w-none sm:w-[108%]"
               style={{ x: panelX, translateX: '-50%', translateY: '-56%' }}
               initial={reduce ? false : { opacity: 0, scale: 0.9 }}
               animate={panelsVisible ? { opacity: 1, scale: 1 } : {}}
@@ -429,10 +450,25 @@ function CtaButtons({ locale }) {
         {t(locale, 'hero.cta1')}
         <Icon name="arrowRight" size={18} />
       </a>
-      <a href="#layanan" className="btn-secondary">
+      <a href="#paket" className="btn-secondary">
         {t(locale, 'hero.cta2')}
       </a>
     </>
+  )
+}
+
+function TrustBar({ locale, className = '' }) {
+  const items = t(locale, 'hero.trust')
+  if (!Array.isArray(items)) return null
+  return (
+    <ul className={`flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-semibold text-akv-navy/60 ${className}`}>
+      {items.map((text) => (
+        <li key={text} className="inline-flex items-center gap-1.5">
+          <Icon name="check" size={13} strokeWidth={2.6} className="text-akv-blue" />
+          <span>{text}</span>
+        </li>
+      ))}
+    </ul>
   )
 }
 

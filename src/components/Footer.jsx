@@ -29,7 +29,7 @@ export default function Footer() {
         initial={reduce ? false : 'hidden'}
         whileInView={reduce ? undefined : 'visible'}
         viewport={{ once: false, margin: '-40px' }}
-        className="container-akv relative z-10 pb-6 pt-12"
+        className="container-akv relative z-10 pb-20 pt-12 sm:pb-10"
       >
         {/* Jargon brand */}
         <motion.p
@@ -118,9 +118,19 @@ export default function Footer() {
           <p className="text-xs font-medium text-akv-navy/55">
             © {year} AKV Arah Karya Visual. {t(locale, 'footer.copyright')}
           </p>
-          <p className="text-xs font-extrabold tracking-wide text-akv-blue">
-            {t(locale, 'footer.tagline')}
-          </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold text-akv-navy/60">
+            <Link to="/syarat-ketentuan" className="transition-colors hover:text-akv-blue">
+              {locale === 'en' ? 'Terms of Order' : 'Syarat & Ketentuan'}
+            </Link>
+            <span aria-hidden="true" className="text-akv-navy/25">·</span>
+            <Link to="/privasi" className="transition-colors hover:text-akv-blue">
+              {locale === 'en' ? 'Privacy Policy' : 'Kebijakan Privasi'}
+            </Link>
+            <span aria-hidden="true" className="hidden text-akv-navy/25 sm:inline">·</span>
+            <span className="font-extrabold tracking-wide text-akv-blue">
+              {t(locale, 'footer.tagline')}
+            </span>
+          </div>
         </motion.div>
       </motion.div>
 

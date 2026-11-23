@@ -64,7 +64,7 @@ export default function Navbar({ visible }) {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="rounded-full px-4 py-2 text-sm font-semibold text-akv-navy/75 transition-colors hover:bg-akv-light/60 hover:text-akv-blue"
+                  className="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-akv-navy/75 transition-colors hover:bg-akv-light/60 hover:text-akv-blue xl:px-4"
                 >
                   {link.label}
                 </a>

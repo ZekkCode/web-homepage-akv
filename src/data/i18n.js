@@ -1,13 +1,6 @@
 /**
- * i18n ringan berbasis query parameter ?locale=en
+ * i18n ringan berbasis query parameter ?lang=en (juga mendukung ?locale=en).
  * Default: id (Indonesia). Supported: id, en.
- *
- * Pemakaian:
- *   import { useLocale, t } from '../data/i18n.js'
- *   const locale = useLocale()       // 'id' | 'en'
- *   t(locale, 'hero.eyebrow')        // string terjemahan
- *
- * ponytail: saat butuh >2 bahasa, pindahkan ke file per-locale dan lazy-load.
  */
 import { useSyncExternalStore, useEffect } from 'react'
 
@@ -22,9 +15,10 @@ function getLocaleFromURL() {
 let currentLocale = getLocaleFromURL()
 const listeners = new Set()
 
-function emit() { listeners.forEach((fn) => fn()) }
+function emit() {
+  listeners.forEach((fn) => fn())
+}
 
-/** Update locale saat URL berubah (popstate / manual) */
 function onUrlChange() {
   const next = getLocaleFromURL()
   if (next !== currentLocale) {
@@ -36,14 +30,16 @@ if (typeof window !== 'undefined') {
   window.addEventListener('popstate', onUrlChange)
 }
 
-export function getLocale() { return currentLocale }
+export function getLocale() {
+  return currentLocale
+}
 
 export function subscribe(fn) {
   listeners.add(fn)
   return () => listeners.delete(fn)
 }
 
-/** Switch locale — push ke URL tanpa reload (?lang=en, sinkron dengan hreflang & sitemap). */
+/** Switch locale tanpa reload (?lang=en, sinkron dengan hreflang & sitemap). */
 export function setLocale(loc) {
   const url = new URL(window.location.href)
   url.searchParams.delete('locale')
@@ -54,10 +50,8 @@ export function setLocale(loc) {
   emit()
 }
 
-/** React hook — reactive locale. */
 export function useLocale() {
   const locale = useSyncExternalStore(subscribe, getLocale)
-  // Update <html lang> setiap kali locale berubah
   useEffect(() => {
     document.documentElement.lang = locale
   }, [locale])
@@ -81,9 +75,10 @@ const strings = {
     'navLinks': [
       { label: 'Beranda', href: '#beranda' },
       { label: 'Layanan', href: '#layanan' },
+      { label: 'Paket', href: '#paket' },
       { label: 'Portofolio', href: '#portofolio' },
-      { label: 'Proses', href: '#proses' },
       { label: 'Tentang Kami', href: '#tentang' },
+      { label: 'FAQ', href: '#faq' },
       { label: 'Kontak', href: '#kontak' },
     ],
 
@@ -93,14 +88,15 @@ const strings = {
     'hero.headline2': 'Urus Visual.',
     'hero.desc': 'AKV membantu kebutuhan desain, branding, CV dan portofolio, website, animasi AI, serta visual digital agar ide kamu tampil lebih jelas dan menarik.',
     'hero.cta1': 'Mulai Proyek',
-    'hero.cta2': 'Lihat Layanan',
+    'hero.cta2': 'Lihat Paket Harga',
+    'hero.trust': ['Konsultasi brief gratis', 'Revisi terarah', 'Harga transparan'],
     'hero.card1.title': 'Desain Grafis',
     'hero.card1.desc': 'Feed, poster & materi promosi',
     'hero.card2.title': 'Branding & Logo',
     'hero.card2.desc': 'Identitas brand yang konsisten',
     'hero.card3.title': 'Website & Portofolio',
     'hero.card3.desc': 'Tampil profesional di mana saja',
-    'hero.serviceCount': '8+ layanan kreatif untukmu',
+    'hero.serviceCount': '8+ layanan kreatif siap dipesan',
     'hero.paletteLabel': 'Palet warna',
     'hero.scrollLabel': 'Scroll website-nya, Cuy!',
     'hero.scrollAriaLabel': 'Gulir ke bagian tentang AKV',
@@ -120,16 +116,27 @@ const strings = {
     'services.eyebrow': 'Layanan',
     'services.title': 'Semua Kebutuhan Visual, Satu Arah',
     'services.desc': 'Dari desain harian sampai website dan animasi, pilih layanan yang kamu butuhkan, sisanya kami urus.',
+    'services.orderBtn': 'Pesan Layanan',
+    'services.waPrefix': 'Halo AKV! Saya tertarik memesan layanan',
     'services.items': [
-      { icon: 'palette', title: 'Desain Grafis', desc: 'Poster, banner, feed, dan kebutuhan visual harian yang rapi dan konsisten.' },
-      { icon: 'badge', title: 'Branding dan Logo', desc: 'Identitas visual lengkap: logo, warna, dan guideline yang siap dipakai.' },
-      { icon: 'file', title: 'CV dan Portofolio', desc: 'CV ATS-friendly dan portofolio yang bikin profilmu tampil menonjol.' },
-      { icon: 'globe', title: 'Website Portofolio', desc: 'Website personal atau bisnis yang responsif, cepat, dan mudah dikelola.' },
-      { icon: 'sparkles', title: 'AI Visual Branding', desc: 'Eksplorasi visual berbasis AI yang tetap diarahkan dengan sentuhan desainer.' },
-      { icon: 'film', title: 'Animasi AI', desc: 'Animasi pendek untuk intro brand, konten, dan presentasi yang hidup.' },
-      { icon: 'video', title: 'Editing Video', desc: 'Editing reels, konten pendek, dan video promosi dengan pacing yang pas.' },
-      { icon: 'megaphone', title: 'Konten Media Sosial', desc: 'Template feed dan konten sosial media yang terarah dan on-brand.' },
+      { icon: 'palette', title: 'Desain Grafis', desc: 'Poster, banner, feed, dan kebutuhan visual harian yang rapi dan konsisten.', price: 'Mulai Rp 35rb', duration: '1-2 hari' },
+      { icon: 'badge', title: 'Branding dan Logo', desc: 'Identitas visual lengkap: logo, warna, dan guideline yang siap dipakai.', price: 'Mulai Rp 150rb', duration: '3-5 hari' },
+      { icon: 'file', title: 'CV dan Portofolio', desc: 'CV ATS-friendly dan portofolio yang bikin profilmu tampil menonjol.', price: 'Mulai Rp 50rb', duration: '1-3 hari' },
+      { icon: 'globe', title: 'Website Portofolio', desc: 'Website personal atau bisnis yang responsif, cepat, dan mudah dikelola.', price: 'Mulai Rp 350rb', duration: '3-7 hari' },
+      { icon: 'sparkles', title: 'AI Visual Branding', desc: 'Eksplorasi visual berbasis AI yang tetap diarahkan dengan sentuhan desainer.', price: 'Mulai Rp 75rb', duration: '1-3 hari' },
+      { icon: 'film', title: 'Animasi AI', desc: 'Animasi pendek untuk intro brand, konten, dan presentasi yang hidup.', price: 'Mulai Rp 100rb', duration: '2-4 hari' },
+      { icon: 'video', title: 'Editing Video', desc: 'Editing reels, konten pendek, dan video promosi dengan pacing yang pas.', price: 'Mulai Rp 60rb', duration: '1-3 hari' },
+      { icon: 'megaphone', title: 'Konten Media Sosial', desc: 'Template feed dan konten sosial media yang terarah dan on-brand.', price: 'Mulai Rp 150rb', duration: '2-4 hari' },
     ],
+
+    // Pricing
+    'pricing.eyebrow': 'Paket & Harga',
+    'pricing.title': 'Pilih Paket Sesuai Kebutuhanmu',
+    'pricing.desc': 'Estimasi harga transparan sejak awal. Butuh kombinasi layanan khusus? Kamu tetap bisa konsultasi gratis dulu.',
+    'pricing.note': 'Harga akhir disesuaikan dengan kompleksitas brief. DP 50% untuk proyek paket & custom.',
+    'pricing.customBtn': 'Tanya Paket Custom via WhatsApp',
+    'pricing.waPrefix': 'Halo AKV! Saya tertarik dengan paket',
+    'pricing.waCustom': 'Halo AKV! Saya ingin konsultasi paket custom sesuai kebutuhan saya.',
 
     // Portfolio
     'portfolio.eyebrow': 'Portofolio',
@@ -138,6 +145,9 @@ const strings = {
     'portfolio.filterAll': 'Semua',
     'portfolio.viewDetail': 'Lihat Detail',
     'portfolio.viewDetailAria': 'Lihat detail',
+    'portfolio.modalClose': 'Tutup pratinjau',
+    'portfolio.modalOrder': 'Pesan Karya Seperti Ini',
+    'portfolio.modalPlaceholderNote': 'Gambar karya sedang disiapkan. Hubungi kami untuk melihat sampel terbaru lewat WhatsApp.',
     'portfolio.waMsg': 'Halo AKV! Saya tertarik dengan project',
     'portfolio.filterAriaLabel': 'Filter kategori portofolio',
     'portfolio.filters': ['Semua', 'Desain', 'Branding', 'CV dan Portofolio', 'Website', 'Animasi'],
@@ -180,6 +190,18 @@ const strings = {
     'testimonials.title': 'Kata Mereka Yang Sudah Dibantu',
     'testimonials.desc': 'Cerita langsung dari klien AKV.',
 
+    // FAQ
+    'faq.eyebrow': 'FAQ',
+    'faq.title': 'Pertanyaan Yang Sering Ditanyakan',
+    'faq.desc': 'Jawaban cepat seputar pemesanan, DP, revisi, estimasi waktu, dan file akhir sebelum kamu mulai proyek.',
+    'faq.ctaText': 'Masih ada pertanyaan lain?',
+    'faq.ctaBtn': 'Tanya langsung via WhatsApp',
+
+    // Floating WA
+    'floatingWa.label': 'Konsultasi WA',
+    'floatingWa.shortLabel': 'Chat AKV',
+    'floatingWa.ariaLabel': 'Konsultasi proyek lewat WhatsApp AKV',
+
     // CTA
     'cta.title': 'Punya Ide Yang Ingin Divisualkan?',
     'cta.desc': 'Ceritakan kebutuhanmu, mulai project bersama AKV.',
@@ -213,7 +235,7 @@ const strings = {
     'notFound.pegiAlt': 'Pegi menunjuk, maskot AKV',
 
     // WhatsApp default
-    'wa.default': 'Halo AKV! Saya ingin mulai project.',
+    'wa.default': 'Halo AKV! Saya ingin konsultasi dan mulai proyek.',
 
     // Language switcher
     'lang.switch': 'EN',
@@ -233,9 +255,10 @@ const strings = {
     'navLinks': [
       { label: 'Home', href: '#beranda' },
       { label: 'Services', href: '#layanan' },
+      { label: 'Pricing', href: '#paket' },
       { label: 'Portfolio', href: '#portofolio' },
-      { label: 'Process', href: '#proses' },
       { label: 'About Us', href: '#tentang' },
+      { label: 'FAQ', href: '#faq' },
       { label: 'Contact', href: '#kontak' },
     ],
 
@@ -245,14 +268,15 @@ const strings = {
     'hero.headline2': 'We Handle the Visuals.',
     'hero.desc': 'AKV helps with design, branding, CV & portfolio, websites, AI animation, and digital visuals so your ideas come across clear and compelling.',
     'hero.cta1': 'Start Project',
-    'hero.cta2': 'View Services',
+    'hero.cta2': 'See Pricing',
+    'hero.trust': ['Free brief consultation', 'Guided revisions', 'Transparent pricing'],
     'hero.card1.title': 'Graphic Design',
     'hero.card1.desc': 'Feed, poster & promo materials',
     'hero.card2.title': 'Branding & Logo',
     'hero.card2.desc': 'Consistent brand identity',
     'hero.card3.title': 'Website & Portfolio',
     'hero.card3.desc': 'Look professional anywhere',
-    'hero.serviceCount': '8+ creative services for you',
+    'hero.serviceCount': '8+ creative services ready to book',
     'hero.paletteLabel': 'Color palette',
     'hero.scrollLabel': 'Scroll down!',
     'hero.scrollAriaLabel': 'Scroll to about section',
@@ -272,15 +296,76 @@ const strings = {
     'services.eyebrow': 'Services',
     'services.title': 'All Your Visual Needs, One Direction',
     'services.desc': 'From daily design to websites and animation, pick what you need, we handle the rest.',
+    'services.orderBtn': 'Order Service',
+    'services.waPrefix': 'Hi AKV! I would like to order',
     'services.items': [
-      { icon: 'palette', title: 'Graphic Design', desc: 'Posters, banners, feeds, and daily visuals that are clean and consistent.' },
-      { icon: 'badge', title: 'Branding & Logo', desc: 'Complete visual identity: logo, colors, and guidelines ready to use.' },
-      { icon: 'file', title: 'CV & Portfolio', desc: 'ATS-friendly CVs and portfolios that make your profile stand out.' },
-      { icon: 'globe', title: 'Portfolio Website', desc: 'Personal or business website that is responsive, fast, and easy to manage.' },
-      { icon: 'sparkles', title: 'AI Visual Branding', desc: 'AI-powered visual exploration guided by a designer\'s touch.' },
-      { icon: 'film', title: 'AI Animation', desc: 'Short animations for brand intros, content, and lively presentations.' },
-      { icon: 'video', title: 'Video Editing', desc: 'Reels, short content, and promo videos with the right pacing.' },
-      { icon: 'megaphone', title: 'Social Media Content', desc: 'Feed templates and social media content that is directed and on-brand.' },
+      { icon: 'palette', title: 'Graphic Design', desc: 'Posters, banners, feeds, and daily visuals that are clean and consistent.', price: 'From IDR 35k', duration: '1-2 days' },
+      { icon: 'badge', title: 'Branding & Logo', desc: 'Complete visual identity: logo, colors, and guidelines ready to use.', price: 'From IDR 150k', duration: '3-5 days' },
+      { icon: 'file', title: 'CV & Portfolio', desc: 'ATS-friendly CVs and portfolios that make your profile stand out.', price: 'From IDR 50k', duration: '1-3 days' },
+      { icon: 'globe', title: 'Portfolio Website', desc: 'Personal or business website that is responsive, fast, and easy to manage.', price: 'From IDR 350k', duration: '3-7 days' },
+      { icon: 'sparkles', title: 'AI Visual Branding', desc: 'AI-powered visual exploration guided by a designer\'s touch.', price: 'From IDR 75k', duration: '1-3 days' },
+      { icon: 'film', title: 'AI Animation', desc: 'Short animations for brand intros, content, and lively presentations.', price: 'From IDR 100k', duration: '2-4 days' },
+      { icon: 'video', title: 'Video Editing', desc: 'Reels, short content, and promo videos with the right pacing.', price: 'From IDR 60k', duration: '1-3 days' },
+      { icon: 'megaphone', title: 'Social Media Content', desc: 'Feed templates and social media content that is directed and on-brand.', price: 'From IDR 150k', duration: '2-4 days' },
+    ],
+
+    // Pricing
+    'pricing.eyebrow': 'Packages & Pricing',
+    'pricing.title': 'Pick the Package That Fits You',
+    'pricing.desc': 'Transparent starting rates from day one. Need a tailored bundle? Reach out for a free consultation.',
+    'pricing.note': 'Final quote depends on brief scope. 50% deposit for package and custom projects.',
+    'pricing.customBtn': 'Ask for Custom Quote on WhatsApp',
+    'pricing.waPrefix': 'Hi AKV! I am interested in the',
+    'pricing.waCustom': 'Hi AKV! I would like to discuss a custom package for my project.',
+    'pricing.items': [
+      {
+        name: 'Starter',
+        badge: 'Students & Personal',
+        price: 'From IDR 50k',
+        unit: 'per project',
+        desc: 'Ideal for single deliverables that are sharp, structured, and delivered fast.',
+        featured: false,
+        ctaLabel: 'Order Starter',
+        features: [
+          'Choose: Single graphic design, ATS-friendly CV, or compact portfolio',
+          'Estimated turnaround 1-3 business days',
+          '2x free minor revisions',
+          'High-resolution ready-to-use files (PNG, PDF, or WebP)',
+          'Free brief consultation via WhatsApp',
+        ],
+      },
+      {
+        name: 'SME & Creator',
+        badge: 'Most Popular',
+        price: 'From IDR 250k',
+        unit: 'per package',
+        desc: 'Built for growing businesses and creators seeking consistent brand visuals.',
+        featured: true,
+        ctaLabel: 'Choose SME & Creator',
+        features: [
+          'Social media content pack, starter branding, or promo video editing',
+          'Estimated turnaround 3-5 business days',
+          '3x guided revisions until it fits',
+          'Ready-to-post assets plus editable source files where applicable',
+          'Cohesive visual concept and brand color direction',
+        ],
+      },
+      {
+        name: 'Brand & Website',
+        badge: 'Full Scale',
+        price: 'From IDR 500k',
+        unit: 'per project',
+        desc: 'End-to-end visual identity and responsive website built to convert.',
+        featured: false,
+        ctaLabel: 'Discuss Custom Scope',
+        features: [
+          'Full logo & brand guidelines and/or responsive SEO-ready website',
+          'Estimated turnaround 5-10 business days',
+          'Milestone-based collaborative revisions',
+          'Complete master files plus online launch assistance',
+          'Post-handover initial support',
+        ],
+      },
     ],
 
     // Portfolio
@@ -290,18 +375,21 @@ const strings = {
     'portfolio.filterAll': 'All',
     'portfolio.viewDetail': 'View Detail',
     'portfolio.viewDetailAria': 'View detail',
+    'portfolio.modalClose': 'Close preview',
+    'portfolio.modalOrder': 'Order Something Similar',
+    'portfolio.modalPlaceholderNote': 'Project preview image is being prepared. Chat with us on WhatsApp to see recent samples.',
     'portfolio.waMsg': 'Hi AKV! I\'m interested in the project',
     'portfolio.filterAriaLabel': 'Filter portfolio categories',
     'portfolio.filters': ['All', 'Design', 'Branding', 'CV & Portfolio', 'Website', 'Animation'],
     'portfolio.items': [
-      { id: 1, title: 'SME Instagram Feed', category: 'Design' },
-      { id: 2, title: 'Logo & Brand Kit', category: 'Branding' },
-      { id: 3, title: 'Student Creative CV', category: 'CV & Portfolio' },
-      { id: 4, title: 'Personal Portfolio Website', category: 'Website' },
-      { id: 5, title: 'Brand Intro Animation', category: 'Animation' },
-      { id: 6, title: 'Campus Event Poster', category: 'Design' },
-      { id: 7, title: 'Organization Rebranding', category: 'Branding' },
-      { id: 8, title: 'SME Landing Page', category: 'Website' },
+      { id: 1, title: 'SME Instagram Feed', category: 'Design', description: 'Consistent promotional feed and story set crafted for clear product messaging.' },
+      { id: 2, title: 'Logo & Brand Kit', category: 'Branding', description: 'Complete visual identity including primary logo, color system, typography, and usage rules.' },
+      { id: 3, title: 'Student Creative CV', category: 'CV & Portfolio', description: 'ATS-friendly CV and portfolio layout highlighting experience and key achievements.' },
+      { id: 4, title: 'Personal Portfolio Website', category: 'Website', description: 'Fast, responsive personal profile site built with clean SEO structure.' },
+      { id: 5, title: 'Brand Intro Animation', category: 'Animation', description: 'Short motion and AI-assisted opener for reels, decks, and brand videos.' },
+      { id: 6, title: 'Campus Event Poster', category: 'Design', description: 'Event publication artwork with clear visual hierarchy for both print and social media.' },
+      { id: 7, title: 'Organization Rebranding', category: 'Branding', description: 'Visual refresh helping an organization look cohesive across every channel.' },
+      { id: 8, title: 'SME Landing Page', category: 'Website', description: 'Focused, mobile-friendly product and service showcase wired directly to WhatsApp.' },
     ],
 
     // Process
@@ -331,6 +419,44 @@ const strings = {
     'testimonials.eyebrow': 'Testimonials',
     'testimonials.title': 'What Our Clients Say',
     'testimonials.desc': 'Stories from AKV clients. Names are partially masked for privacy.',
+
+    // FAQ
+    'faq.eyebrow': 'FAQ',
+    'faq.title': 'Frequently Asked Questions',
+    'faq.desc': 'Quick answers about ordering, deposits, revisions, turnaround time, and final file delivery.',
+    'faq.ctaText': 'Still have questions?',
+    'faq.ctaBtn': 'Ask directly on WhatsApp',
+    'faq.items': [
+      {
+        question: 'How do I order a service from AKV?',
+        answer: 'Click the order button on any service or package to chat directly on WhatsApp. Share your brief, references, and target deadline, and we will send a clear quote and timeline before starting.',
+      },
+      {
+        question: 'How does payment work? Is a deposit available?',
+        answer: 'Yes. For package and custom projects, work begins after a 50% deposit, with the remaining balance due once you approve the final preview before master file delivery.',
+      },
+      {
+        question: 'How many revisions are included?',
+        answer: 'Starter includes 2 minor revisions, SME & Creator includes 3 guided revisions, and Brand & Website includes milestone-based revisions covering copy, color, or layout refinements within the initial brief.',
+      },
+      {
+        question: 'How long does delivery usually take?',
+        answer: 'Single graphics, CVs, and short video edits usually take 1-3 business days. Branding and content bundles take 3-5 business days, while websites take 3-10 business days depending on scope.',
+      },
+      {
+        question: 'What file formats will I receive?',
+        answer: 'You receive high-resolution ready-to-use files (PNG, PDF, WebP, or MP4). For branding, SME, and website packages, editable files or source code are included as agreed.',
+      },
+      {
+        question: 'Do you work with students, SMEs, and urgent deadlines?',
+        answer: 'Yes, we regularly support students, campus organizations, SMEs, and personal brands with friendly rates. Let us know your deadline during the brief chat so we can check slot availability.',
+      },
+    ],
+
+    // Floating WA
+    'floatingWa.label': 'WhatsApp Chat',
+    'floatingWa.shortLabel': 'Chat AKV',
+    'floatingWa.ariaLabel': 'Start a consultation on AKV WhatsApp',
 
     // CTA
     'cta.title': 'Have an Idea to Visualize?',
@@ -365,7 +491,7 @@ const strings = {
     'notFound.pegiAlt': 'Pegi pointing, AKV mascot',
 
     // WhatsApp default
-    'wa.default': 'Hi AKV! I\'d like to start a project.',
+    'wa.default': 'Hi AKV! I would like to consult and start a project.',
 
     // Language switcher
     'lang.switch': 'ID',

@@ -24,7 +24,7 @@ export default function CtaSection() {
               <div className="absolute -bottom-32 right-10 h-80 w-80 rounded-full bg-akv-sky/15 blur-3xl" />
             </div>
 
-            <div className="relative z-10 grid grid-cols-12 items-center gap-4 lg:pr-80">
+            <div className="relative z-10 grid grid-cols-12 items-center gap-4 pr-20 sm:pr-56 lg:pr-80">
               <div className="col-span-12 text-left">
                 <h2 id="cta-heading" className="text-xl font-extrabold uppercase tracking-tight sm:text-4xl">
                   {t(locale, 'cta.title')}
@@ -32,19 +32,19 @@ export default function CtaSection() {
                 <p className="mt-2 text-sm leading-relaxed text-white/70 sm:mt-4 sm:text-lg">
                   {t(locale, 'cta.desc')}
                 </p>
-                <div className="mt-4 flex flex-row items-center gap-2.5 sm:mt-8 sm:gap-3">
+                <div className="mt-4 flex flex-wrap items-center gap-2.5 sm:mt-8 sm:gap-3">
                   <a
                     href={waLink(t(locale, 'wa.default'))}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-bold text-akv-navy shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-akv-light active:translate-y-0 active:scale-[0.98] sm:px-7 sm:py-3.5 sm:text-base"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-bold text-akv-navy shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-akv-light active:translate-y-0 active:scale-[0.98] sm:min-h-[48px] sm:px-7 sm:py-3.5 sm:text-base"
                   >
                     {t(locale, 'cta.btn1')}
                     <Icon name="arrowRight" size={14} />
                   </a>
                   <a
                     href={`mailto:${contact.email}`}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/30 px-4 py-2 text-xs font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 active:translate-y-0 active:scale-[0.98] sm:border-2 sm:px-7 sm:py-3.5 sm:text-base"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-white/30 px-4 py-2 text-xs font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 active:translate-y-0 active:scale-[0.98] sm:min-h-[48px] sm:border-2 sm:px-7 sm:py-3.5 sm:text-base"
                   >
                     {t(locale, 'cta.btn2')}
                   </a>

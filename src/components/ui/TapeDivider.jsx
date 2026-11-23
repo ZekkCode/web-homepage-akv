@@ -24,27 +24,27 @@ export default function TapeDivider({ className = '' }) {
 
   return (
     <div
-      className={`relative overflow-hidden h-28 sm:h-32 md:h-36 ${className}`}
+      className={`relative overflow-hidden h-20 sm:h-28 md:h-32 ${className}`}
       aria-hidden="true"
     >
-      {/* tape 1: miring ke kanan — biru */}
+      {/* tape 1: miring ke kanan — akv-blue */}
       <div
         className={`${tapeBase} ${h} ${w} top-1/2 -translate-y-[75%] -rotate-2`}
         style={{
           backgroundImage: stripeOverlay,
-          backgroundColor: '#2563EB',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+          backgroundColor: '#0B5CFF',
+          boxShadow: '0 2px 8px rgba(13,27,61,0.22)',
         }}
       >
         <span className={tapeText}>{repeated}</span>
       </div>
-      {/* tape 2: miring ke kiri — navy */}
+      {/* tape 2: miring ke kiri — akv-navy */}
       <div
         className={`${tapeBase} ${h} ${w} top-1/2 -translate-y-[25%] rotate-2`}
         style={{
           backgroundImage: stripeOverlay,
-          backgroundColor: '#1E3A8A',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+          backgroundColor: '#0D1B3D',
+          boxShadow: '0 2px 8px rgba(13,27,61,0.22)',
         }}
       >
         <span className={tapeText}>{repeated}</span>

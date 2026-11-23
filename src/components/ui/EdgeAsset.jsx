@@ -28,14 +28,14 @@ export default function EdgeAsset({
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      // Tanpa animasi, tampilkan langsung dengan opacity target
-      el.style.opacity = opacity
-      return
-    }
 
-    const ctx = gsap.context(() => {
-      // Entrance — slides in from the screen edge (AOS-like, reversible)
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 1024px)', () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        el.style.opacity = opacity
+        return
+      }
+
       gsap.fromTo(
         el,
         { autoAlpha: 0, x: side === 'left' ? -70 : 70, rotate: rotate + (side === 'left' ? -8 : 8) },
@@ -49,12 +49,10 @@ export default function EdgeAsset({
             trigger: el,
             start: 'top 92%',
             end: 'bottom 5%',
-            // hidup dua arah: masuk saat scroll turun, keluar-masuk lagi saat scroll naik
             toggleActions: 'play reverse play reverse',
           },
         }
       )
-      // Slow parallax drift while the section scrolls by
       gsap.to(el, {
         y: -speed,
         ease: 'none',
@@ -66,7 +64,8 @@ export default function EdgeAsset({
         },
       })
     })
-    return () => ctx.revert()
+
+    return () => mm.revert()
   }, [src, side, speed, rotate, opacity])
 
   const pos = {}

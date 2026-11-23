@@ -52,9 +52,11 @@ export function generateMainSitemap(baseUrl = 'https://akv.zakariamp.id') {
     <xhtml:link rel="alternate" hreflang="x-default" href="${xmlEscape(`${cleanBase}/`)}"/>`
 
   const urls = [
-    { loc: `${cleanBase}/`, priority: '1.0', changefreq: 'weekly' },
-    { loc: `${cleanBase}/?lang=id`, priority: '0.9', changefreq: 'weekly' },
-    { loc: `${cleanBase}/?lang=en`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${cleanBase}/`, priority: '1.0', changefreq: 'weekly', withAlternates: true },
+    { loc: `${cleanBase}/?lang=id`, priority: '0.9', changefreq: 'weekly', withAlternates: true },
+    { loc: `${cleanBase}/?lang=en`, priority: '0.9', changefreq: 'weekly', withAlternates: true },
+    { loc: `${cleanBase}/syarat-ketentuan`, priority: '0.5', changefreq: 'monthly', withAlternates: false },
+    { loc: `${cleanBase}/privasi`, priority: '0.5', changefreq: 'monthly', withAlternates: false },
   ]
 
   const entries = urls
@@ -63,8 +65,7 @@ export function generateMainSitemap(baseUrl = 'https://akv.zakariamp.id') {
     <loc>${xmlEscape(page.loc)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
-${alternates}
+    <priority>${page.priority}</priority>${page.withAlternates ? `\n${alternates}` : ''}
   </url>`
     )
     .join('\n')

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import {
   generateSitemapIndex,
@@ -48,20 +48,74 @@ function sitemapPlugin() {
   }
 }
 
-export default defineConfig({
-  plugins: [react(), sitemapPlugin()],
-  server: {
-    port: 5173,
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-animation': ['framer-motion', 'gsap', 'lenis'],
+/** Bridge lokal supaya /api/upload-r2 bisa diuji langsung di `npm run dev` selain di Vercel. */
+function localApiPlugin(env) {
+  return {
+    name: 'vite-plugin-local-r2-api',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const urlPath = req.url?.split('?')[0]
+        if (urlPath !== '/api/upload-r2') return next()
+
+        try {
+          Object.assign(process.env, env)
+          const mod = await import('./api/upload-r2.js')
+          const handler = mod[req.method]
+          if (typeof handler !== 'function') {
+            res.statusCode = 405
+            res.setHeader('Content-Type', 'application/json')
+            return res.end(JSON.stringify({ ok: false, error: 'Method not allowed' }))
+          }
+
+          const chunks = []
+          for await (const chunk of req) chunks.push(chunk)
+          const body = Buffer.concat(chunks)
+
+          const headers = new Headers()
+          for (const [k, v] of Object.entries(req.headers)) {
+            if (Array.isArray(v)) headers.set(k, v.join(', '))
+            else if (typeof v === 'string') headers.set(k, v)
+          }
+
+          const webReq = new Request(`http://${req.headers.host || 'localhost:5173'}${req.url}`, {
+            method: req.method,
+            headers,
+            body: ['GET', 'HEAD'].includes(req.method) ? undefined : body,
+          })
+
+          const webRes = await handler(webReq)
+          res.statusCode = webRes.status
+          webRes.headers.forEach((val, key) => res.setHeader(key, val))
+          const outBuf = Buffer.from(await webRes.arrayBuffer())
+          res.end(outBuf)
+        } catch (err) {
+          console.error('[local-api] /api/upload-r2 error:', err)
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify({ ok: false, error: 'Gagal menjalankan handler lokal /api/upload-r2.' }))
+        }
+      })
+    },
+  }
+}
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  return {
+    plugins: [react(), sitemapPlugin(), localApiPlugin(env)],
+    server: {
+      port: 5173,
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-animation': ['framer-motion', 'gsap', 'lenis'],
+          },
         },
       },
+      chunkSizeWarningLimit: 600,
     },
-    chunkSizeWarningLimit: 600,
-  },
+  }
 })

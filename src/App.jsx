@@ -4,8 +4,10 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 import PenCursor from './components/ui/PenCursor.jsx'
 import Landing from './pages/Landing.jsx'
 
-// Halaman admin & 404 di-lazy-load supaya bundle landing tetap ramping
+// Halaman admin, legal & 404 di-lazy-load supaya bundle landing tetap ramping
 const Admin = lazy(() => import('./pages/Admin.jsx'))
+const Terms = lazy(() => import('./pages/Terms.jsx'))
+const Privacy = lazy(() => import('./pages/Privacy.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 const ADMIN_ROUTE = import.meta.env.VITE_ADMIN_ROUTE || '/admin-akv'
@@ -25,6 +27,8 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/syarat-ketentuan" element={<Terms />} />
+          <Route path="/privasi" element={<Privacy />} />
           <Route path={ADMIN_ROUTE} element={<Admin />} />
           <Route path="/admin" element={<Navigate to={ADMIN_ROUTE} replace />} />
           <Route path="/login" element={<Navigate to={ADMIN_ROUTE} replace />} />
