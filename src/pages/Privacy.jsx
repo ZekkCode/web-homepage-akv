@@ -116,7 +116,7 @@ export default function Privacy() {
   usePageSeo({
     title: copy.seoTitle,
     description: copy.seoDesc,
-    canonical: locale === 'en' ? `${siteUrl}/privasi?lang=en` : `${siteUrl}/privasi`,
+    canonical: locale === 'en' ? `${siteUrl}/privasi?locale=en` : `${siteUrl}/privasi`,
     locale,
   })
 

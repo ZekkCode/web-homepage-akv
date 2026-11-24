@@ -136,7 +136,7 @@ export default function Terms() {
   usePageSeo({
     title: copy.seoTitle,
     description: copy.seoDesc,
-    canonical: locale === 'en' ? `${siteUrl}/syarat-ketentuan?lang=en` : `${siteUrl}/syarat-ketentuan`,
+    canonical: locale === 'en' ? `${siteUrl}/syarat-ketentuan?locale=en` : `${siteUrl}/syarat-ketentuan`,
     locale,
   })
 

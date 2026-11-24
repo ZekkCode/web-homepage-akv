@@ -14,6 +14,7 @@ export default function PenCursor() {
     const el = ref.current
     if (!el) return
     if (!window.matchMedia('(pointer: fine)').matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     document.documentElement.classList.add('pen-cursor')
 
@@ -33,7 +34,7 @@ export default function PenCursor() {
     const onOver = (e) => {
       el.classList.toggle(
         'cursor-hot',
-        !!e.target.closest('a, button, [role="tab"], input, textarea')
+        !!e.target.closest('a, button, [role="tab"], input, textarea, select, label')
       )
     }
     const onDown = () => el.classList.add('cursor-press')
@@ -79,8 +80,8 @@ export default function PenCursor() {
           {/* Breather Slit Line and Hole */}
           <line x1="1.5" y1="1.5" x2="5" y2="5" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" />
           <circle cx="5.5" cy="5.5" r="0.9" fill="#FFFFFF" />
-          {/* Stylus Cyan Accent Ring */}
-          <line x1="9.5" y1="16.5" x2="16" y2="10" stroke="#38BDF8" strokeWidth="2.2" strokeLinecap="round" />
+          {/* Stylus Sky Accent Ring (AKV Sky #7FAEE8) */}
+          <line x1="9.5" y1="16.5" x2="16" y2="10" stroke="#7FAEE8" strokeWidth="2.2" strokeLinecap="round" />
         </g>
       </svg>
     </div>

@@ -1,16 +1,13 @@
 /**
  * Store konten AKV.
  *
- * Sumber data utama: Supabase. Fallback: static data dari site.js.
- * Landing page membaca konten lewat useContent() sehingga edit dari
- * dashboard admin langsung tampil.
+ * Sumber data utama: Supabase REST (fetch ringan, TANPA membundel @supabase/supabase-js
+ * ke landing page publik!). Fallback: static data dari site.js + cache localStorage.
  *
- * Setiap tabel di-hydrate secara independen agar tabel baru (pricing_packages,
- * faqs) atau kolom opsional tetap fallback bersih ke site.js bila migrasi SQL
- * belum dijalankan di Supabase.
+ * SDK @supabase/supabase-js hanya di-lazy-import saat saveContent() dipanggil dari
+ * Dashboard Admin (/admin-akv).
  */
 import { useSyncExternalStore } from 'react'
-import { supabase } from '../utils/supabase.js'
 import {
   contact as defaultContact,
   services as defaultServices,
@@ -22,6 +19,8 @@ import {
 } from './site.js'
 
 const STORAGE_KEY = 'akv-content'
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || '').trim().replace(/\/$/, '')
+const SUPABASE_KEY = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '').trim()
 
 const defaults = () => ({
   contact: { ...defaultContact },
@@ -99,6 +98,7 @@ function loadLocal() {
 }
 
 let cache = loadLocal()
+let syncVersion = 0
 const listeners = new Set()
 
 function emit() {
@@ -113,30 +113,38 @@ function persistLocal(data) {
   }
 }
 
-// --- Supabase fetch ---
+// --- Lightweight public REST fetch (tanpa SDK Supabase di landing) ---
 
-async function fetchTableSafe(table) {
+async function fetchRest(path) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return null
   try {
-    const { data, error } = await supabase.from(table).select('*').order('id')
-    if (error || !Array.isArray(data) || data.length === 0) return null
-    return data
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        Accept: 'application/json',
+      },
+    })
+    if (!res.ok) return null
+    return await res.json()
   } catch {
     return null
   }
+}
+
+async function fetchTableSafe(table) {
+  const data = await fetchRest(`${table}?select=*&order=id`)
+  return Array.isArray(data) && data.length > 0 ? data : null
 }
 
 async function fetchContactSafe() {
-  try {
-    const r = await supabase.from('contact').select('*').limit(1).single()
-    if (r.error || !r.data) return null
-    const { id, ...rest } = r.data
-    return rest
-  } catch {
-    return null
-  }
+  const data = await fetchRest('contact?select=*&limit=1')
+  if (!Array.isArray(data) || !data[0]) return null
+  const { id, ...rest } = data[0]
+  return rest
 }
 
-/** Fetch semua data dari Supabase secara independen, fallback ke static/local per tabel. */
+/** Fetch semua data publik dari Supabase secara independen, fallback per tabel ke static/local. */
 export async function hydrate() {
   const [contact, services, portfolioItems, testimonials, teamMembers, pricingPackages, faqs] =
     await Promise.all([
@@ -183,6 +191,7 @@ export async function hydrate() {
 
   if (changed) {
     cache = next
+    syncVersion += 1
     persistLocal(cache)
     emit()
   }
@@ -199,9 +208,10 @@ export function subscribe(fn) {
 }
 
 export const getContent = () => cache
+export const getSyncVersion = () => syncVersion
 
 /** Helper simpan tabel dengan retry kolom inti jika kolom baru belum dimigrasi di Supabase. */
-async function replaceTable(table, fullRows, fallbackRows = null) {
+async function replaceTable(supabase, table, fullRows, fallbackRows = null) {
   const del = await supabase.from(table).delete().gt('id', 0)
   if (del.error) return { ok: false, error: del.error.message }
 
@@ -222,7 +232,7 @@ async function replaceTable(table, fullRows, fallbackRows = null) {
 }
 
 /**
- * Simpan konten. Persist ke Supabase (upsert/replace), fallback localStorage.
+ * Simpan konten. Lazy-load Supabase client agar landing publik tetap ramping.
  * @param {Partial<typeof cache>} partial
  * @returns {Promise<{ok: boolean, warning?: string}>}
  */
@@ -234,6 +244,8 @@ export async function saveContent(partial) {
   const warnings = []
 
   try {
+    const { supabase } = await import('../utils/supabase.js')
+
     if (partial.contact) {
       const r = await supabase
         .from('contact')
@@ -256,7 +268,7 @@ export async function saveContent(partial) {
         title: s.title || '',
         desc: s.desc || '',
       }))
-      const r = await replaceTable('services', fullRows, baseRows)
+      const r = await replaceTable(supabase, 'services', fullRows, baseRows)
       if (r.warning) warnings.push(r.warning)
       else if (!r.ok) warnings.push(r.error)
     }
@@ -277,7 +289,7 @@ export async function saveContent(partial) {
         image: p.image || null,
         tone: p.tone || 'from-akv-blue to-akv-royal',
       }))
-      const r = await replaceTable('portfolio_items', fullRows, baseRows)
+      const r = await replaceTable(supabase, 'portfolio_items', fullRows, baseRows)
       if (r.warning) warnings.push(r.warning)
       else if (!r.ok) warnings.push(r.error)
     }
@@ -289,7 +301,7 @@ export async function saveContent(partial) {
         role: t.role || '',
         quote: t.quote || '',
       }))
-      const r = await replaceTable('testimonials', rows)
+      const r = await replaceTable(supabase, 'testimonials', rows)
       if (!r.ok) warnings.push(r.error)
     }
 
@@ -300,7 +312,7 @@ export async function saveContent(partial) {
         role: m.role || '',
         url: m.url || '',
       }))
-      const r = await replaceTable('team_members', rows)
+      const r = await replaceTable(supabase, 'team_members', rows)
       if (!r.ok) warnings.push(r.error)
     }
 
@@ -316,8 +328,8 @@ export async function saveContent(partial) {
         cta_label: p.ctaLabel || 'Pilih Paket',
         features: Array.isArray(p.features) ? p.features : [],
       }))
-      const r = await replaceTable('pricing_packages', rows)
-      if (!r.ok) warnings.push(`Tabel pricing_packages belum ada di Supabase (tersimpan di lokal). Jalankan supabase/setup.sql.`)
+      const r = await replaceTable(supabase, 'pricing_packages', rows)
+      if (!r.ok) warnings.push('Tabel pricing_packages belum ada di Supabase (tersimpan di lokal). Jalankan supabase/setup.sql.')
     }
 
     if (partial.faqs) {
@@ -326,8 +338,8 @@ export async function saveContent(partial) {
         question: f.question || '',
         answer: f.answer || '',
       }))
-      const r = await replaceTable('faqs', rows)
-      if (!r.ok) warnings.push(`Tabel faqs belum ada di Supabase (tersimpan di lokal). Jalankan supabase/setup.sql.`)
+      const r = await replaceTable(supabase, 'faqs', rows)
+      if (!r.ok) warnings.push('Tabel faqs belum ada di Supabase (tersimpan di lokal). Jalankan supabase/setup.sql.')
     }
   } catch {
     warnings.push('Supabase sedang tidak terjangkau, perubahan tersimpan di browser lokal.')
@@ -336,16 +348,22 @@ export async function saveContent(partial) {
   return warnings.length > 0 ? { ok: true, warning: warnings[0] } : { ok: true }
 }
 
-export function resetContent() {
+export async function resetContent() {
   cache = defaults()
+  syncVersion += 1
   persistLocal(cache)
   emit()
-  saveContent(cache).catch(() => {})
+  return saveContent(cache).catch(() => ({ ok: false }))
 }
 
 /** Hook konten reaktif untuk komponen React. */
 export function useContent() {
   return useSyncExternalStore(subscribe, getContent)
+}
+
+/** Hook versi sinkronisasi (bertambah saat hydrate atau resetContent selesai). */
+export function useContentSyncVersion() {
+  return useSyncExternalStore(subscribe, getSyncVersion)
 }
 
 /** Normalisasi nomor WA ke format internasional (tanpa +, awalan 0 -> 62). */

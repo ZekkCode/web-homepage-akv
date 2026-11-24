@@ -3,6 +3,18 @@
 --  Aman dijalankan ulang (idempoten) di Supabase SQL Editor.
 -- ====================================================================
 
+-- 0. Whitelist admin berdasarkan email Supabase Auth
+--    Untuk menambah admin lain, tambahkan email ke array di bawah.
+create or replace function public.is_akv_admin()
+returns boolean
+language sql
+stable
+as $$
+  select lower(coalesce(auth.jwt() ->> 'email', '')) = any (
+    array['zakariamujur6@gmail.com']
+  );
+$$;
+
 -- 1. Tabel contact (single row, id=1)
 create table if not exists public.contact (
   id int primary key default 1 check (id = 1),
@@ -76,7 +88,7 @@ create table if not exists public.faqs (
 -- ====================================================================
 --  ROW LEVEL SECURITY (RLS)
 --  - Public SELECT untuk semua tabel (landing page bisa baca)
---  - INSERT/UPDATE/DELETE hanya untuk authenticated users (admin)
+--  - INSERT/UPDATE/DELETE HANYA untuk email yang lolos public.is_akv_admin()
 -- ====================================================================
 
 -- contact
@@ -87,9 +99,9 @@ drop policy if exists "Admin update contact" on public.contact;
 drop policy if exists "Admin delete contact" on public.contact;
 
 create policy "Public read contact" on public.contact for select to anon, authenticated using (true);
-create policy "Admin insert contact" on public.contact for insert to authenticated with check (true);
-create policy "Admin update contact" on public.contact for update to authenticated using (true) with check (true);
-create policy "Admin delete contact" on public.contact for delete to authenticated using (true);
+create policy "Admin insert contact" on public.contact for insert to authenticated with check (public.is_akv_admin());
+create policy "Admin update contact" on public.contact for update to authenticated using (public.is_akv_admin()) with check (public.is_akv_admin());
+create policy "Admin delete contact" on public.contact for delete to authenticated using (public.is_akv_admin());
 
 -- services
 alter table public.services enable row level security;
@@ -99,9 +111,9 @@ drop policy if exists "Admin update services" on public.services;
 drop policy if exists "Admin delete services" on public.services;
 
 create policy "Public read services" on public.services for select to anon, authenticated using (true);
-create policy "Admin insert services" on public.services for insert to authenticated with check (true);
-create policy "Admin update services" on public.services for update to authenticated using (true) with check (true);
-create policy "Admin delete services" on public.services for delete to authenticated using (true);
+create policy "Admin insert services" on public.services for insert to authenticated with check (public.is_akv_admin());
+create policy "Admin update services" on public.services for update to authenticated using (public.is_akv_admin()) with check (public.is_akv_admin());
+create policy "Admin delete services" on public.services for delete to authenticated using (public.is_akv_admin());
 
 -- portfolio_items
 alter table public.portfolio_items enable row level security;
@@ -111,9 +123,9 @@ drop policy if exists "Admin update portfolio_items" on public.portfolio_items;
 drop policy if exists "Admin delete portfolio_items" on public.portfolio_items;
 
 create policy "Public read portfolio_items" on public.portfolio_items for select to anon, authenticated using (true);
-create policy "Admin insert portfolio_items" on public.portfolio_items for insert to authenticated with check (true);
-create policy "Admin update portfolio_items" on public.portfolio_items for update to authenticated using (true) with check (true);
-create policy "Admin delete portfolio_items" on public.portfolio_items for delete to authenticated using (true);
+create policy "Admin insert portfolio_items" on public.portfolio_items for insert to authenticated with check (public.is_akv_admin());
+create policy "Admin update portfolio_items" on public.portfolio_items for update to authenticated using (public.is_akv_admin()) with check (public.is_akv_admin());
+create policy "Admin delete portfolio_items" on public.portfolio_items for delete to authenticated using (public.is_akv_admin());
 
 -- testimonials
 alter table public.testimonials enable row level security;
@@ -123,9 +135,9 @@ drop policy if exists "Admin update testimonials" on public.testimonials;
 drop policy if exists "Admin delete testimonials" on public.testimonials;
 
 create policy "Public read testimonials" on public.testimonials for select to anon, authenticated using (true);
-create policy "Admin insert testimonials" on public.testimonials for insert to authenticated with check (true);
-create policy "Admin update testimonials" on public.testimonials for update to authenticated using (true) with check (true);
-create policy "Admin delete testimonials" on public.testimonials for delete to authenticated using (true);
+create policy "Admin insert testimonials" on public.testimonials for insert to authenticated with check (public.is_akv_admin());
+create policy "Admin update testimonials" on public.testimonials for update to authenticated using (public.is_akv_admin()) with check (public.is_akv_admin());
+create policy "Admin delete testimonials" on public.testimonials for delete to authenticated using (public.is_akv_admin());
 
 -- team_members
 alter table public.team_members enable row level security;
@@ -135,9 +147,9 @@ drop policy if exists "Admin update team_members" on public.team_members;
 drop policy if exists "Admin delete team_members" on public.team_members;
 
 create policy "Public read team_members" on public.team_members for select to anon, authenticated using (true);
-create policy "Admin insert team_members" on public.team_members for insert to authenticated with check (true);
-create policy "Admin update team_members" on public.team_members for update to authenticated using (true) with check (true);
-create policy "Admin delete team_members" on public.team_members for delete to authenticated using (true);
+create policy "Admin insert team_members" on public.team_members for insert to authenticated with check (public.is_akv_admin());
+create policy "Admin update team_members" on public.team_members for update to authenticated using (public.is_akv_admin()) with check (public.is_akv_admin());
+create policy "Admin delete team_members" on public.team_members for delete to authenticated using (public.is_akv_admin());
 
 -- pricing_packages
 alter table public.pricing_packages enable row level security;
@@ -147,9 +159,9 @@ drop policy if exists "Admin update pricing_packages" on public.pricing_packages
 drop policy if exists "Admin delete pricing_packages" on public.pricing_packages;
 
 create policy "Public read pricing_packages" on public.pricing_packages for select to anon, authenticated using (true);
-create policy "Admin insert pricing_packages" on public.pricing_packages for insert to authenticated with check (true);
-create policy "Admin update pricing_packages" on public.pricing_packages for update to authenticated using (true) with check (true);
-create policy "Admin delete pricing_packages" on public.pricing_packages for delete to authenticated using (true);
+create policy "Admin insert pricing_packages" on public.pricing_packages for insert to authenticated with check (public.is_akv_admin());
+create policy "Admin update pricing_packages" on public.pricing_packages for update to authenticated using (public.is_akv_admin()) with check (public.is_akv_admin());
+create policy "Admin delete pricing_packages" on public.pricing_packages for delete to authenticated using (public.is_akv_admin());
 
 -- faqs
 alter table public.faqs enable row level security;
@@ -159,16 +171,16 @@ drop policy if exists "Admin update faqs" on public.faqs;
 drop policy if exists "Admin delete faqs" on public.faqs;
 
 create policy "Public read faqs" on public.faqs for select to anon, authenticated using (true);
-create policy "Admin insert faqs" on public.faqs for insert to authenticated with check (true);
-create policy "Admin update faqs" on public.faqs for update to authenticated using (true) with check (true);
-create policy "Admin delete faqs" on public.faqs for delete to authenticated using (true);
+create policy "Admin insert faqs" on public.faqs for insert to authenticated with check (public.is_akv_admin());
+create policy "Admin update faqs" on public.faqs for update to authenticated using (public.is_akv_admin()) with check (public.is_akv_admin());
+create policy "Admin delete faqs" on public.faqs for delete to authenticated using (public.is_akv_admin());
 
 -- ====================================================================
 --  SEED DATA — isi bawaan dari site.js
 -- ====================================================================
 
 insert into public.contact (id, whatsapp, instagram, tiktok, email) values
-  (1, '0881081772005', 'https://instagram.com/aku.visual', 'https://tiktok.com/@aku.visual', 'zakariamujur6@gmail.com')
+  (1, '0881081772005', 'https://instagram.com/akuvisual.id', 'https://tiktok.com/@akuvisual.id', 'zakariamujur6@gmail.com')
 on conflict (id) do nothing;
 
 insert into public.services (id, icon, title, "desc", price, duration) values
@@ -252,6 +264,6 @@ insert into public.faqs (id, question, answer) values
 on conflict (id) do nothing;
 
 insert into public.team_members (id, name, role, url) values
-  (1, 'Zakaria Mujur Prasetyo', 'Owner · Visual Designer', 'https://zakariamp.id'),
+  (1, 'Zakaria Mujur Prasetyo', 'Owner · Visual Designer',        'https://zakariamp.id'),
   (2, 'Lia Nur Khasanah',       'Co-Founder · Creative Director', 'https://lianurkhasanah.my.id')
 on conflict (id) do nothing;

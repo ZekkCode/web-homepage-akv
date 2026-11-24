@@ -8,7 +8,7 @@ import LoginForm from '../admin/LoginForm.jsx'
 import Sidebar from '../admin/Sidebar.jsx'
 import Icon from '../components/ui/Icon.jsx'
 import { portfolioFilters } from '../data/site.js'
-import { resetContent, saveContent, useContent } from '../data/store.js'
+import { resetContent, saveContent, useContent, useContentSyncVersion } from '../data/store.js'
 
 const ICON_OPTIONS = [
   'palette', 'badge', 'file', 'globe', 'sparkles', 'film', 'video', 'megaphone',
@@ -52,6 +52,7 @@ export default function Admin() {
 function Dashboard({ onLogout }) {
   const navigate = useNavigate()
   const [tab, setTab] = useState('kontak')
+  const [resetTick, setResetTick] = useState(0)
 
   const handleLogout = async () => {
     await logout()
@@ -65,19 +66,21 @@ function Dashboard({ onLogout }) {
 
       {/* Panel konten */}
       <main className="flex-1 px-4 py-6 sm:px-6 lg:overflow-y-auto lg:px-10 lg:py-8">
-        {tab === 'kontak' && <ContactPanel key="kontak" />}
-        {tab === 'layanan' && <ServicesPanel key="layanan" />}
-        {tab === 'paket' && <PricingPanel key="paket" />}
-        {tab === 'portofolio' && <PortfolioPanel key="portofolio" />}
-        {tab === 'testimoni' && <TestimonialsPanel key="testimoni" />}
-        {tab === 'faq' && <FaqPanel key="faq" />}
-        {tab === 'tim' && <TeamPanel key="tim" />}
+        {tab === 'kontak' && <ContactPanel key={`kontak-${resetTick}`} />}
+        {tab === 'layanan' && <ServicesPanel key={`layanan-${resetTick}`} />}
+        {tab === 'paket' && <PricingPanel key={`paket-${resetTick}`} />}
+        {tab === 'portofolio' && <PortfolioPanel key={`portofolio-${resetTick}`} />}
+        {tab === 'testimoni' && <TestimonialsPanel key={`testimoni-${resetTick}`} />}
+        {tab === 'faq' && <FaqPanel key={`faq-${resetTick}`} />}
+        {tab === 'tim' && <TeamPanel key={`tim-${resetTick}`} />}
 
         <div className="mt-10 border-t border-akv-navy/10 pt-5">
           <button
-            onClick={() => {
+            type="button"
+            onClick={async () => {
               if (window.confirm('Kembalikan SEMUA konten ke bawaan? Perubahan tersimpan akan dihapus.')) {
-                resetContent()
+                await resetContent()
+                setResetTick((n) => n + 1)
               }
             }}
             className="text-xs font-bold text-akv-navy/45 underline-offset-2 transition-colors hover:text-akv-navy hover:underline"
@@ -121,7 +124,32 @@ function PanelShell({ title, hint, onSave, saved, warning, children }) {
   )
 }
 
-function useSaveState() {
+function useSyncedDraft(source, clone) {
+  const syncVersion = useContentSyncVersion()
+  const [draft, setDraft] = useState(() => clone(source))
+  const dirtyRef = useRef(false)
+  const cloneRef = useRef(clone)
+  cloneRef.current = clone
+
+  useEffect(() => {
+    if (!dirtyRef.current) {
+      setDraft(cloneRef.current(source))
+    }
+  }, [syncVersion, source])
+
+  const updateDraft = (next) => {
+    dirtyRef.current = true
+    setDraft(next)
+  }
+
+  const markClean = () => {
+    dirtyRef.current = false
+  }
+
+  return [draft, updateDraft, markClean]
+}
+
+function useSaveState(onSaved) {
   const [saved, setSaved] = useState(false)
   const [warning, setWarning] = useState('')
   const timerRef = useRef(null)
@@ -130,6 +158,7 @@ function useSaveState() {
     setWarning('')
     const res = await saveContent(partial)
     if (res?.warning) setWarning(res.warning)
+    onSaved?.()
     setSaved(true)
     clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => setSaved(false), 2400)
@@ -157,8 +186,8 @@ function Field({ label, children }) {
 
 function ContactPanel() {
   const { contact } = useContent()
-  const [draft, setDraft] = useState({ ...contact })
-  const { saved, warning, handleSave } = useSaveState()
+  const [draft, setDraft, markClean] = useSyncedDraft(contact, (c) => ({ ...c }))
+  const { saved, warning, handleSave } = useSaveState(markClean)
   const set = (k) => (e) => setDraft({ ...draft, [k]: e.target.value })
 
   return (
@@ -229,8 +258,8 @@ function CrudList({ items, setItems, renderFields, addLabel, makeNew }) {
 
 function ServicesPanel() {
   const { services } = useContent()
-  const [items, setItems] = useState(services.map((s) => ({ ...s })))
-  const { saved, warning, handleSave } = useSaveState()
+  const [items, setItems, markClean] = useSyncedDraft(services, (list) => list.map((s) => ({ ...s })))
+  const { saved, warning, handleSave } = useSaveState(markClean)
 
   return (
     <PanelShell
@@ -300,13 +329,13 @@ function ServicesPanel() {
 
 function PricingPanel() {
   const { pricingPackages } = useContent()
-  const [items, setItems] = useState(
-    pricingPackages.map((p) => ({
+  const [items, setItems, markClean] = useSyncedDraft(pricingPackages, (list) =>
+    list.map((p) => ({
       ...p,
       featuresText: Array.isArray(p.features) ? p.features.join('\n') : '',
     }))
   )
-  const { saved, warning, handleSave } = useSaveState()
+  const { saved, warning, handleSave } = useSaveState(markClean)
 
   return (
     <PanelShell
@@ -533,8 +562,8 @@ function R2ImageField({ value, onChange }) {
 
 function PortfolioPanel() {
   const { portfolioItems } = useContent()
-  const [items, setItems] = useState(portfolioItems.map((p) => ({ ...p })))
-  const { saved, warning, handleSave } = useSaveState()
+  const [items, setItems, markClean] = useSyncedDraft(portfolioItems, (list) => list.map((p) => ({ ...p })))
+  const { saved, warning, handleSave } = useSaveState(markClean)
   const categories = portfolioFilters.filter((f) => f !== 'Semua')
 
   return (
@@ -610,8 +639,8 @@ function PortfolioPanel() {
 
 function TestimonialsPanel() {
   const { testimonials } = useContent()
-  const [items, setItems] = useState(testimonials.map((t) => ({ ...t })))
-  const { saved, warning, handleSave } = useSaveState()
+  const [items, setItems, markClean] = useSyncedDraft(testimonials, (list) => list.map((t) => ({ ...t })))
+  const { saved, warning, handleSave } = useSaveState(markClean)
 
   return (
     <PanelShell
@@ -655,8 +684,8 @@ function TestimonialsPanel() {
 
 function FaqPanel() {
   const { faqs } = useContent()
-  const [items, setItems] = useState(faqs.map((f) => ({ ...f })))
-  const { saved, warning, handleSave } = useSaveState()
+  const [items, setItems, markClean] = useSyncedDraft(faqs, (list) => list.map((f) => ({ ...f })))
+  const { saved, warning, handleSave } = useSaveState(markClean)
 
   return (
     <PanelShell
@@ -699,8 +728,8 @@ function FaqPanel() {
 
 function TeamPanel() {
   const { teamMembers } = useContent()
-  const [items, setItems] = useState(teamMembers.map((m) => ({ ...m })))
-  const { saved, warning, handleSave } = useSaveState()
+  const [items, setItems, markClean] = useSyncedDraft(teamMembers, (list) => list.map((m) => ({ ...m })))
+  const { saved, warning, handleSave } = useSaveState(markClean)
 
   return (
     <PanelShell

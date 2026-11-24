@@ -107,7 +107,9 @@ const strings = {
     // About
     'about.eyebrow': 'Tentang kami',
     'about.title': 'Kenalan Dengan AKV',
-    'about.p1': 'AKV adalah <strong>Arah Karya Visual</strong>, jasa kreatif yang membantu pelajar, mahasiswa, organisasi, UMKM, dan personal brand dalam mengarahkan ide menjadi visual yang lebih rapi, jelas, dan menarik.',
+    'about.p1Prefix': 'AKV adalah ',
+    'about.p1Brand': 'Arah Karya Visual',
+    'about.p1Suffix': ', jasa kreatif yang membantu pelajar, mahasiswa, organisasi, UMKM, dan personal brand dalam mengarahkan ide menjadi visual yang lebih rapi, jelas, dan menarik.',
     'about.p2': 'Bersama Pegi, maskot pena digital kami, AKV percaya setiap ide punya arah. Tugas kami memastikan arah itu sampai dalam bentuk visual yang tepat.',
     'about.since': 'Sejak',
     'about.pegiAlt': 'Pegi memegang tablet bertuliskan AKV',
@@ -287,7 +289,9 @@ const strings = {
     // About
     'about.eyebrow': 'About us',
     'about.title': 'Meet AKV',
-    'about.p1': 'AKV stands for <strong>Arah Karya Visual</strong> (Directed Creative Visual), a creative service helping students, organizations, SMEs, and personal brands turn ideas into cleaner, clearer, and more compelling visuals.',
+    'about.p1Prefix': 'AKV stands for ',
+    'about.p1Brand': 'Arah Karya Visual',
+    'about.p1Suffix': ' (Directed Creative Visual), a creative service helping students, organizations, SMEs, and personal brands turn ideas into cleaner, clearer, and more compelling visuals.',
     'about.p2': 'Together with Pegi, our digital pen mascot, AKV believes every idea has a direction. Our job is to make sure it arrives in the right visual form.',
     'about.since': 'Since',
     'about.pegiAlt': 'Pegi holding a tablet with AKV written on it',

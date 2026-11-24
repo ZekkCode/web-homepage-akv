@@ -9,8 +9,8 @@
 
 export const contact = {
   whatsapp: '0881081772005',
-  instagram: 'https://instagram.com/aku.visual',
-  tiktok: 'https://tiktok.com/@aku.visual',
+  instagram: 'https://instagram.com/akuvisual.id',
+  tiktok: 'https://tiktok.com/@akuvisual.id',
   email: 'zakariamujur6@gmail.com',
 }
 

@@ -43,10 +43,11 @@ export default function About() {
               title={<span id="tentang-heading">{t(locale, 'about.title')}</span>}
             />
             <Reveal delay={0.1}>
-              <p
-                className="-mt-3 text-sm leading-relaxed text-akv-navy/75 sm:-mt-6 sm:text-base sm:leading-relaxed lg:text-lg"
-                dangerouslySetInnerHTML={{ __html: t(locale, 'about.p1') }}
-              />
+              <p className="-mt-3 text-sm leading-relaxed text-akv-navy/75 sm:-mt-6 sm:text-base sm:leading-relaxed lg:text-lg">
+                {t(locale, 'about.p1Prefix')}
+                <strong className="font-extrabold text-akv-navy">{t(locale, 'about.p1Brand')}</strong>
+                {t(locale, 'about.p1Suffix')}
+              </p>
             </Reveal>
             <Reveal delay={0.18}>
               <p className="mt-2 text-sm leading-relaxed text-akv-navy/75 sm:mt-4 sm:text-base sm:leading-relaxed lg:text-lg">

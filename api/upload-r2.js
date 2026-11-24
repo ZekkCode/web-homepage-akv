@@ -2,6 +2,16 @@ import crypto from 'node:crypto'
 
 const MAX_BYTES = 4 * 1024 * 1024 // 4 MB (di bawah limit 4.5 MB Vercel Function)
 const ALLOWED_FOLDERS = new Set(['portfolio', 'team', 'assets'])
+const DEFAULT_ADMIN_EMAILS = ['zakariamujur6@gmail.com']
+
+function getAllowedAdminEmails() {
+  const raw = process.env.ADMIN_EMAILS || ''
+  const parsed = raw
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+  return parsed.length > 0 ? parsed : DEFAULT_ADMIN_EMAILS
+}
 
 function json(data, status = 200) {
   return Response.json(data, {
@@ -63,6 +73,13 @@ async function verifyAdmin(request) {
     if (!res.ok) return { ok: false, status: 401, error: 'Sesi admin tidak valid atau sudah kedaluwarsa.' }
     const user = await res.json()
     if (!user?.id) return { ok: false, status: 401, error: 'Akun admin tidak terverifikasi.' }
+
+    const email = String(user.email || '').trim().toLowerCase()
+    const allowed = getAllowedAdminEmails()
+    if (!email || !allowed.includes(email)) {
+      return { ok: false, status: 403, error: 'Akun ini tidak memiliki izin pengelola AKV.' }
+    }
+
     return { ok: true, user }
   } catch (err) {
     console.error('[upload-r2] Supabase auth check failed:', err)
